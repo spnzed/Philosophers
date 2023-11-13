@@ -6,9 +6,11 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 16:56:28 by aaespino          #+#    #+#             */
-/*   Updated: 2023/11/13 17:04:26 by aaespino         ###   ########.fr       */
+/*   Updated: 2023/11/13 17:27:02 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "philosophers.h"
 
 int	main (int argc , char **argv)
 {
