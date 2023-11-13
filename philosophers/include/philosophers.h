@@ -6,6 +6,7 @@
 # include <unistd.h>
 # include <sys/time.h>
 # include <pthread.h>
+# include <stdbool.h>
 
 typedef pthread_t t_thread;
 typedef pthread_mutex_t t_mutex;
@@ -46,5 +47,9 @@ typedef struct s_table
 	t_mutex		table_mutex;
 	t_mutex		write_mutex;
 }	t_table;
+
+int		ft_atoi(const char *str);
+long	ft_atol(const char *str);
+int		ft_usleep(useconds_t time);
 
 #endif

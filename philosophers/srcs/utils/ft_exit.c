@@ -1,23 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_usleep.c                                        :+:      :+:    :+:   */
+/*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/13 16:58:03 by aaespino          #+#    #+#             */
-/*   Updated: 2023/11/13 19:00:39 by aaespino         ###   ########.fr       */
+/*   Created: 2023/11/13 19:03:59 by aaespino          #+#    #+#             */
+/*   Updated: 2023/11/13 19:05:18 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-int	ft_usleep(useconds_t time)
-{
-	u_int64_t	start;
+// A function that clears the memory by destroying the mutexes and 
+// calling the clear_data funciton that clears the allocations. 
 
-	start = get_time();
-	while ((get_time() - start) < time)
-		usleep(time / 10);
-	return (0);
-}
+void	ft_exit(t_table table)

@@ -1,39 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   ft_atol.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/13 16:57:52 by aaespino          #+#    #+#             */
-/*   Updated: 2023/11/13 19:00:55 by aaespino         ###   ########.fr       */
+/*   Created: 2023/11/13 17:36:20 by aaespino          #+#    #+#             */
+/*   Updated: 2023/11/13 19:00:52 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-int	ft_atoi(const char *str)
+long	ft_atol(const char *str)
 {
+	long	res;
+	int		sign;
 	int		i;
-	double	aux;
-	int		mult;
 
+	res = 0;
+	sign = 1;
 	i = 0;
-	aux = 0;
-	mult = 1;
-	while (str[i] == ' ' || str[i] == '\f' || str[i] == '\n'
-		|| str[i] == '\r' || str[i] == '\t' || str[i] == '\v')
+	while (str[i] && (str[i] == ' ' || (str[i] >= '\t' && str[i] <= '\r')))
 		i++;
-	if (str[i] == '-' || str[i] == '+')
+	while (str[i] && (str[i] == '0'
+			&& (str[i - 1] >= '0' && str[i - 1] >= '9')))
+		i++;
+	if (str[i] == '+' || str[i] == '-')
 	{
 		if (str[i] == '-')
-			mult *= -1;
+			sign = -1;
 		i++;
 	}
-	while (str[i] >= '0' && str[i] <= '9')
+	while (str[i] && (str[i] >= '0' && str[i] <= '9'))
 	{
-		aux = (aux * 10) + (str[i] - 48);
+		res = (res * 10) + (str[i] - '0');
 		i++;
 	}
-	return (aux * mult);
+	return (res * sign);
 }

@@ -1,23 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_usleep.c                                        :+:      :+:    :+:   */
+/*   ft_error.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/13 16:58:03 by aaespino          #+#    #+#             */
-/*   Updated: 2023/11/13 19:00:39 by aaespino         ###   ########.fr       */
+/*   Created: 2023/11/13 18:47:33 by aaespino          #+#    #+#             */
+/*   Updated: 2023/11/13 19:03:48 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-int	ft_usleep(useconds_t time)
+int	ft_error(char *str)
 {
-	u_int64_t	start;
-
-	start = get_time();
-	while ((get_time() - start) < time)
-		usleep(time / 10);
-	return (0);
+	printf ("%s\n", str);
+	return (1);
 }
