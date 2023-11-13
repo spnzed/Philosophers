@@ -48,8 +48,16 @@ typedef struct s_table
 	t_mutex		write_mutex;
 }	t_table;
 
-int		ft_atoi(const char *str);
-long	ft_atol(const char *str);
-int		ft_usleep(useconds_t time);
+//utils
+int			ft_atoi(const char *str);
+long		ft_atol(const char *str);
+void		ft_clear_data(t_table *table);
+int			ft_error(char *str);
+void		ft_exit(t_table table);
+bool		ft_found(char c, char *str);
+u_int64_t	ft_get_time(void);
+int			ft_input_checker(char **argv);
+int			ft_strcmp(const char *s1, const char *s2);
+int			ft_usleep(useconds_t time);
 
 #endif
