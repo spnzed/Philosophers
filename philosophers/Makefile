@@ -11,6 +11,7 @@ FLAGS       := -Wall -Wextra -Werror
 
 SRCS        :=      srcs/main/actions.c \
                     srcs/main/init.c \
+                    srcs/main/parsing.c \
                     srcs/main/threads.c \
                     srcs/philosophers.c \
                     srcs/utils/ft_atoi.c \
@@ -21,6 +22,7 @@ SRCS        :=      srcs/main/actions.c \
                     srcs/utils/ft_found.c \
                     srcs/utils/ft_get_time.c \
                     srcs/utils/ft_input_check.c \
+                    srcs/utils/ft_safe_malloc.c \
                     srcs/utils/ft_strcmp.c \
                     srcs/utils/ft_usleep.c \
                           
