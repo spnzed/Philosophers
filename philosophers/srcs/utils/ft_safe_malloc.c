@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_safe_malloc.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaronespinosa <aaronespinosa@student.42    +#+  +:+       +#+        */
+/*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 22:52:42 by aaronespino       #+#    #+#             */
-/*   Updated: 2023/11/13 22:55:08 by aaronespino      ###   ########.fr       */
+/*   Updated: 2023/11/15 18:41:08 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
