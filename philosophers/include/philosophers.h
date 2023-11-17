@@ -74,12 +74,17 @@ typedef struct s_table
 	t_mutex		write_mutex;
 }	t_table;
 
-//	main
-//parsing.c
+//***************    PROTOTYPES     ***************
+
+//***	main	***
+
+//process the input
 void	    parse_input(t_table *table, char **argv);
-//init.c
+//init table and philos data
 void		prepare_table(t_table *table);
-//	utils
+
+
+//***	utils	***
 int			ft_atoi(const char *str);
 long		ft_atol(const char *str);
 void		ft_clear_data(t_table *table);
