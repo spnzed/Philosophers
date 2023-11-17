@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 18:13:57 by aaespino          #+#    #+#             */
-/*   Updated: 2023/11/16 19:19:26 by aaespino         ###   ########.fr       */
+/*   Updated: 2023/11/17 14:12:22 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@ static void	handle_error(int status, t_pthread_code code)
 	else if (EPERM == status)
 		ft_error ("The current thread does not hold a lock on mutex.");
 	else if (EDEADLK == status)
-		ft_error ("A deadlock would occur if the thread blocked waiting for mutex.");
+		ft_error ("Deadlock possible if thread blocked waits for mutex.");
 	else if (ENOMEM == status)
-		ft_error ("The process cannot allocate enough memory to create another mutex.");
+		ft_error ("Insufficient memory to create a new mutex.");
 	else if (EBUSY == status)
 		ft_error ("Mutex is locked.");
 }

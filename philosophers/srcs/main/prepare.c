@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init.c                                             :+:      :+:    :+:   */
+/*   prepare.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aaespino <aaespino@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/13 16:58:27 by aaespino          #+#    #+#             */
-/*   Updated: 2023/11/16 18:54:22 by aaespino         ###   ########.fr       */
+/*   Created: 2023/11/17 15:30:46 by aaespino          #+#    #+#             */
+/*   Updated: 2023/11/17 15:45:00 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,23 +15,31 @@
 //ASSIGN_FORKS
 //Este programa sera usado por CALL_PHILOS
 // NO LO COMPRENDO
-/* 1
+//
+static void	prepare_philos(t_table *table)
+{
+	
+}
 
-*/
+static void	prepare_philos(t_table *table)
+{
+	int		i;
+	int		ph_nbr;
+	t_philo	*philo;
 
-/* 2
-
-*/
-
-//CALL_PHILOS
-/* 1
-Añadir un puntero de nuestra estructura de filos
-*/
-
-/* 2
-Recorremos de la misma forma que "prepare table"
-    Inicializamos todos los datos de philos
-*/
+	i = 0;
+	philo_nbr = (int)table->philo_nbr;
+	while (i < philo_nbr)
+	{
+		philo = table_philos[i];
+		philo->philo_id = i;
+		philo->full = false;
+		philo->meals_count = 0;
+		philo->table = table;
+		ft_safe_mutex(&philo->mutex, INIT);
+		prepare_forks(philo, table->forks, i);
+	}
+}
 
 
 void    prepare_table(t_table *table)
@@ -42,13 +50,13 @@ void    prepare_table(t_table *table)
     table->end_simulation = false;
     table->threads_ready = false;
     table->threads_running = 0;
-    //table->philos = ft_safe_malloc(table->philo_nbr * sizeof(t_philo));
-    //table->forks = ft_safe_malloc(table->philo_nbr * sizeof(t_fork));
+    table->philos = ft_safe_malloc(table->philo_nbr * sizeof(t_philo));
+    table->forks = ft_safe_malloc(table->philo_nbr * sizeof(t_fork));
     while (i < table->philo_nbr)
     {
         ft_safe_mutex (&table->forks[i].fork, INIT);
         table->forks[i].fork_id = i;
         i++;
     }
-    //philoinit
+    prepare_philosophers(table);
 }
