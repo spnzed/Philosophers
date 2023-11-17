@@ -49,11 +49,11 @@ typedef struct s_philo
 	bool		full;
 	long		meals_count;
 	long		last_meal_time;
+	t_table		table;
 	t_thread	thread_id;
 	t_fork		*first;
 	t_fork		*second;
 	t_mutex		philo_mutex;
-	t_table		table;
 }	t_philo;
 
 typedef struct s_table
