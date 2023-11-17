@@ -6,19 +6,29 @@
 /*   By: aaespino <aaespino@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 15:30:46 by aaespino          #+#    #+#             */
-/*   Updated: 2023/11/17 15:45:53 by aaespino         ###   ########.fr       */
+/*   Updated: 2023/11/17 16:39:45 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-//ASSIGN_FORKS
-//Este programa sera usado por CALL_PHILOS
-// NO LO COMPRENDO
-//
-static void	prepare_philos(t_table *table)
+static void	distribute_forks(t_philo *philo, t_fork *forks, int i)
 {
-	
+	int	philo_nbr;
+	int philo_position;
+
+	philo_nbr = (int)philo->table->philo_nbr;
+	philo_pos = i;
+	if (philo->id % 2 != 0)
+	{
+		philo->left = &forks[(philo_pos + 1) % philo_nbr];
+		philo->right = &forks[philo_pos];
+	}
+	else
+	{
+		philo->left = &forks[philo_pos];
+		philo->right = &forks[(philo_pos + 1) % philo_nbr];
+	}
 }
 
 static void	prepare_philos(t_table *table)
@@ -32,15 +42,14 @@ static void	prepare_philos(t_table *table)
 	while (i < philo_nbr)
 	{
 		philo = table_philos[i];
-		philo->philo_id = i;
+		philo->philo_id = i + 1;
 		philo->full = false;
 		philo->meals_count = 0;
 		philo->table = table;
 		ft_safe_mutex(&philo->mutex, INIT);
-		prepare_forks(philo, table->forks, i);
+		distribute_forks(philo, table->forks, i);
 	}
 }
-
 
 void    prepare_table(t_table *table)
 {

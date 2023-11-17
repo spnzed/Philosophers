@@ -51,8 +51,8 @@ typedef struct s_philo
 	long		last_meal_time;
 	t_table		table;
 	t_thread	thread_id;
-	t_fork		*first;
-	t_fork		*second;
+	t_fork		*left;
+	t_fork		*right;
 	t_mutex		philo_mutex;
 }	t_philo;
 
