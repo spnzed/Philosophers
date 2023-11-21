@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 16:56:28 by aaespino          #+#    #+#             */
-/*   Updated: 2023/11/15 18:09:32 by aaespino         ###   ########.fr       */
+/*   Updated: 2023/11/21 18:31:13 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,13 @@
 int	main (int argc , char **argv)
 {
 	t_table	table;
+	t_data	data;
 
 	if (argc == 5 || argc == 6)
 	{
-		parse_input(&table, argv);
-		prepare_table(&table);
-		start_eating(&table);
+		parse_input(&table, &data, argv);
+		prepare_table(&table, &data);
+		start_eating(&table, &data);
 		clean_dishes(&table);
 	}
 	else

@@ -37,6 +37,15 @@ typedef enum e_pthread_code
 	DETACH,
 }   t_pthread_code;
 
+typedef struct s_data
+{
+	long		philo_nbr;
+	long		time_to_die;
+	long		time_to_eat;
+	long		time_to_sleep;
+	long		limit_meals_nbr;
+}	t_data;
+
 typedef struct s_fork
 {
 	t_mutex	fork;
@@ -46,32 +55,19 @@ typedef struct s_fork
 typedef struct s_philo
 {
 	int			philo_id;
-	bool		full;
+	int			philo_position;
 	long		meals_count;
 	long		last_meal_time;
-	t_table		table;
-	t_thread	thread_id;
 	t_fork		*left;
 	t_fork		*right;
-	t_mutex		philo_mutex;
+	t_data		*data;
+	bool		full;
 }	t_philo;
 
 typedef struct s_table
 {
-	long		philo_nbr;
-	long		time_to_die;
-	long		time_to_eat;
-	long		time_to_sleep;
-	long		limit_meals_nbr;
-	long		threads_running;
-	long		start_simulation;
-	bool		end_simulation;
-	bool		threads_ready;
-	t_thread	monitor;
 	t_fork		*forks;
 	t_philo		*philos;
-	t_mutex		table_mutex;
-	t_mutex		write_mutex;
 }	t_table;
 
 //***************    PROTOTYPES     ***************
@@ -79,10 +75,11 @@ typedef struct s_table
 //***	main	***
 
 //process the input
-void	    parse_input(t_table *table, char **argv);
+void	    parse_input(t_data *data, t_table *table, char **argv);
 //init table and philos data
-void		prepare_table(t_table *table);
-
+void		prepare_table(t_table *table, t_data *data);
+//🥩
+void		start_eating(t_table *table, t_data *data);
 
 //***	utils	***
 int			ft_atoi(const char *str);
