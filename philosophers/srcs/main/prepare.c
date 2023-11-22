@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 15:30:46 by aaespino          #+#    #+#             */
-/*   Updated: 2023/11/21 18:35:13 by aaespino         ###   ########.fr       */
+/*   Updated: 2023/11/22 19:40:00 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ void	prepare_table(t_table *table, t_data *data)
 		if (pthread_mutex_init(&table->forks[i].fork, NULL) != 0)
         	return 1;
 		table->forks[i].fork_id = i;
+		table->philos[i].table = table;
 		prepare_philos(&table->philos[i], &table->forks[i], i);
 		i++;
 	}

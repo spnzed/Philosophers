@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 22:08:22 by aaronespino       #+#    #+#             */
-/*   Updated: 2023/11/21 17:00:05 by aaespino         ###   ########.fr       */
+/*   Updated: 2023/11/22 15:45:32 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,12 @@ static int comprove_argv(char *arg)
 
 void    parse_input(t_data *data, t_table *table, char **argv)
 {
-    data->philo_nbr = comprove_argv(argv[0]);
-    data->time_to_die = comprove_argv(argv[1]) * 1000;
-    data->time_to_eat = comprove_argv(argv[2]) * 1000;
-    data->time_to_sleep = comprove_argv(argv[3]) * 1000;
-    if (argv[4])
-        data->limit_meals_nbr = comprove_argv(argv[4]);
+    data->philo_nbr = comprove_argv(argv[1]);
+    data->time_to_die = comprove_argv(argv[2]) * 1000;
+    data->time_to_eat = comprove_argv(argv[3]) * 1000;
+    data->time_to_sleep = comprove_argv(argv[4]) * 1000;
+    if (argv[5])
+        data->limit_meals_nbr = comprove_argv(argv[5]);
     else
         data->limit_meals_nbr = -1;
 }

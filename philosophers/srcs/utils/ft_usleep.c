@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 16:58:03 by aaespino          #+#    #+#             */
-/*   Updated: 2023/11/13 19:00:39 by aaespino         ###   ########.fr       */
+/*   Updated: 2023/11/22 18:14:56 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,6 @@ int	ft_usleep(useconds_t time)
 
 	start = get_time();
 	while ((get_time() - start) < time)
-		usleep(time / 10);
+		usleep(50);
 	return (0);
 }

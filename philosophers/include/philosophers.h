@@ -44,6 +44,7 @@ typedef struct s_data
 	long		time_to_eat;
 	long		time_to_sleep;
 	long		limit_meals_nbr;
+	u_int64_t	start_simulation;
 }	t_data;
 
 typedef struct s_fork
@@ -60,14 +61,20 @@ typedef struct s_philo
 	long		last_meal_time;
 	t_fork		*left;
 	t_fork		*right;
+	t_thread	*thread_id;
+	t_table		*table;
 	t_data		*data;
+	t_mutex		philo_mutex;
 	bool		full;
 }	t_philo;
 
 typedef struct s_table
 {
+	bool		threads_ready;
 	t_fork		*forks;
 	t_philo		*philos;
+	t_thread	monitor;
+	t_mutex		table_mutex;
 }	t_table;
 
 //***************    PROTOTYPES     ***************
@@ -80,6 +87,11 @@ void	    parse_input(t_data *data, t_table *table, char **argv);
 void		prepare_table(t_table *table, t_data *data);
 //🥩
 void		start_eating(t_table *table, t_data *data);
+void		*dinner_routine(t_philo *philo);
+//routines
+void    	one_philo();
+void    	routine();
+void    	monitor();
 
 //***	utils	***
 int			ft_atoi(const char *str);
