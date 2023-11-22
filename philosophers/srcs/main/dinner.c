@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 16:58:18 by aaespino          #+#    #+#             */
-/*   Updated: 2023/11/22 18:52:26 by aaespino         ###   ########.fr       */
+/*   Updated: 2023/11/22 19:55:25 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ static void	call_philosophers(t_table *table, t_data *data)
     {
         while (i < data->philo_nbr)
         {
-            if (pthread_create(table->philos[i].thread_id, NULL, routine, 
-                &table->philos[i]) == 0)
+            if (pthread_create(table->philos[i].thread_id, NULL, 
+                    dinner_routine, &table->philos[i]) == 0)
                 return (1);
             i++;
         }
@@ -55,8 +55,8 @@ static void handle_threads(t_table *table, t_data *data)
 void    start_eating (t_table *table, t_data *data)
 {
     call_philosophers(table, data);
-    //lock->mutex and true bool "threads are ready"
+    //lock->mutex and ✅ bool "threadsready"
     close_threads(table, data);
-    //(UN)?lock->mutex and bool "endsimu are ready"
+    //(UN)?lock->mutex and ✅ bool "endsimu"
     pthread_join(table->monitor, NULL);
 }
