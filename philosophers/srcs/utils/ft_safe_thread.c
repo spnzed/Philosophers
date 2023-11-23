@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 18:13:57 by aaespino          #+#    #+#             */
-/*   Updated: 2023/11/23 16:44:22 by aaespino         ###   ########.fr       */
+/*   Updated: 2023/11/23 18:43:32 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,10 @@
 
 static bool	handle_error (int status, t_pthread_code code)
 {
+	printf("AYAYA\n\n\n");
+	printf ("\n\nSTATUS: %d\n\n", status);
 	if (!status)
-		return (NULL);
+		return (true);
 	if (EAGAIN == status)
 		return (ft_error ("Thread creation failed: resource or limit issue."));
 	else if (EPERM == status)
@@ -36,8 +38,17 @@ static bool	handle_error (int status, t_pthread_code code)
 
 bool	ft_safe_thread(t_thread *thread, void *(*function)(void *), void *data, t_pthread_code code)
 {
+	int	n;
+	
+	printf("HELLO %d\n", code);
 	if (CREATE == code)
-		return (handle_error(pthread_create(thread, NULL, function, data), code));
+	{
+		printf("Creating\n");
+		
+		n = pthread_create(thread, NULL, function, data);
+		printf("N: %d\n", n);
+		return (handle_error(n, code));
+	}
 	if (JOIN == code)
 		return (handle_error(pthread_join(*thread, NULL), code));
 	if (DETACH == code)

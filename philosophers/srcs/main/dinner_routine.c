@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 18:50:12 by aaespino          #+#    #+#             */
-/*   Updated: 2023/11/23 16:31:57 by aaespino         ###   ########.fr       */
+/*   Updated: 2023/11/23 18:42:12 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ void	*dinner_routine(void *data)
 {
 	t_philo *philo;
 
+	printf("HHHHHHHHHHHH\n");
 	philo = (t_philo *)data;
 	wait_threads(philo->table);
 	set_last_meal(&philo->philo_mutex, &philo->data->last_meal_time, ft_get_time());

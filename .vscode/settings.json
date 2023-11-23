@@ -3,6 +3,7 @@
 		"__functional_03": "c",
 		"functional": "c",
 		"philosophers.h": "c",
-		"locale": "c"
+		"locale": "c",
+		"system_error": "c"
 	}
 }

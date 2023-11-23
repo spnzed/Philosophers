@@ -45,7 +45,6 @@ typedef struct s_data
 	long		time_to_eat;
 	long		time_to_sleep;
 	long		limit_meals_nbr;
-	long		meals_count;
 	u_int64_t	start_simulation;
 	long		threads_running;
 	long		last_meal_time;
@@ -70,6 +69,7 @@ typedef struct s_philo
 {
 	int			philo_id;
 	int			philo_position;
+	long		meals_count;
 	t_thread	*thread_id;
 	t_mutex		philo_mutex;
 	t_fork		*left;

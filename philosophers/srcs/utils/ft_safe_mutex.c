@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 18:13:57 by aaespino          #+#    #+#             */
-/*   Updated: 2023/11/23 16:44:08 by aaespino         ###   ########.fr       */
+/*   Updated: 2023/11/23 17:30:36 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static bool	handle_error(int status, t_mutex_code code)
 {
 	if (!status)
-		return (NULL);
+		return (true);
 	else if (EINVAL == status)
 	{
 		if (LOCK == code || UNLOCK == code)
