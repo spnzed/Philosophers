@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 19:04:19 by aaespino          #+#    #+#             */
-/*   Updated: 2023/11/13 19:08:26 by aaespino         ###   ########.fr       */
+/*   Updated: 2023/11/23 16:42:23 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 // A function to clear all the memory allocations. 
 
-void	ft_clear_data(t_table	*table)
-{
+// void	ft_clear_data(t_table	*table)
+// {
 	
-}
+// }

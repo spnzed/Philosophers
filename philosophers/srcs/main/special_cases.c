@@ -1,23 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_safe_malloc.c                                   :+:      :+:    :+:   */
+/*   special_cases.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/13 22:52:42 by aaronespino       #+#    #+#             */
-/*   Updated: 2023/11/15 18:41:08 by aaespino         ###   ########.fr       */
+/*   Created: 2023/11/23 15:28:24 by aaespino          #+#    #+#             */
+/*   Updated: 2023/11/23 16:22:26 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-void    *ft_safe_malloc(size_t bytes)
+void	*one_philo(void *pointer)
 {
-    void    *ret;
+	pointer = NULL;
+	return (pointer);
+}
 
-    ret = malloc(bytes);
-    if (!ret)
-        ft_error("Malloc error");
-    return (ret);
+void	*monitor(void *pointer)
+{    
+	pointer = NULL;
+	return (pointer);
 }

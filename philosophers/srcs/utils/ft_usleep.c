@@ -6,18 +6,20 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 16:58:03 by aaespino          #+#    #+#             */
-/*   Updated: 2023/11/22 18:14:56 by aaespino         ###   ########.fr       */
+/*   Updated: 2023/11/23 16:49:46 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
+#include <sys/time.h>
 
 int	ft_usleep(useconds_t time)
 {
 	u_int64_t	start;
+	struct timeval	va;
 
-	start = get_time();
-	while ((get_time() - start) < time)
+	start = gettimeofday(&va, NULL);
+	while ((gettimeofday(&va, NULL) - start) < time)
 		usleep(50);
 	return (0);
 }

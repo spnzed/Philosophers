@@ -2,37 +2,36 @@
 #                                     CONFIG                                   #
 ################################################################################
 
-NAME        := philosophers
-CC          := gcc
-FLAGS       := -Wall -Wextra -Werror 
+NAME        := philo
+CC        := gcc
+FLAGS    := -Wall -Wextra -Werror -Iinclude -fsanitize=thread
 ################################################################################
 #                                 PROGRAM'S SRCS                               #
 ################################################################################
 
-SRCS        :=      srcs/main/actions.c \
-                    srcs/main/init.c \
-                    srcs/main/parsing.c \
-                    srcs/main/threads.c \
-                    srcs/philosophers.c \
-                    srcs/utils/ft_atoi.c \
-                    srcs/utils/ft_atol.c \
-                    srcs/utils/ft_clear_data.c \
-                    srcs/utils/ft_error.c \
-                    srcs/utils/ft_exit.c \
-                    srcs/utils/ft_found.c \
-                    srcs/utils/ft_get_time.c \
-                    srcs/utils/ft_input_check.c \
-                    srcs/utils/ft_safe_malloc.c \
-                    srcs/utils/ft_strcmp.c \
-                    srcs/utils/ft_usleep.c \
+SRCS        :=            srcs/philosophers.c \
+                          srcs/main/dinner_routine.c \
+                          srcs/main/parsing.c \
+                          srcs/main/prepare.c \
+                          srcs/main/special_cases.c \
+                          srcs/main/start_eating.c \
+                          srcs/utils/ft_atoi.c \
+                          srcs/utils/ft_atol.c \
+                          srcs/utils/ft_clear_data.c \
+                          srcs/utils/ft_error.c \
+                          srcs/utils/ft_exit.c \
+                          srcs/utils/ft_found.c \
+                          srcs/utils/ft_get_time.c \
+                          srcs/utils/ft_input_check.c \
+                          srcs/utils/ft_safe_mutex.c \
+                          srcs/utils/ft_safe_thread.c \
+                          srcs/utils/ft_strcmp.c \
+                          srcs/utils/ft_usleep.c \
                           
 OBJS        := $(SRCS:.c=.o)
 
-INCLUDE        :=      -I include/philosp\
-
-
 .c.o:
-	${CC} ${FLAGS} ${INCLUDE} -c $< -o ${<:.c=.o}
+	${CC} ${FLAGS} -c $< -o ${<:.c=.o}
 
 ################################################################################
 #                                  Makefile  objs                              #
@@ -47,10 +46,10 @@ BLUE		:= \033[1;34m
 CYAN 		:= \033[1;36m
 RM		    := rm -f
 
-${NAME}:	${OBJS} 
+${NAME}:	${OBJS}
 			@echo "$(GREEN)Compilation ${CLR_RMV}of ${YELLOW}$(NAME) ${CLR_RMV}..."
-			${CC} ${FLAGS} ${INCLUDE} -o ${NAME} ${OBJS}
-			@echo "$(GREEN)$(NAME) created[0m ✔️"
+			${CC} ${FLAGS} -o ${NAME} ${OBJS} ${INCLUDES}
+			@echo "$(GREEN)$(NAME) created ✔️"
 
 all:		${NAME}
 

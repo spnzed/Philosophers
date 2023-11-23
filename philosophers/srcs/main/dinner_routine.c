@@ -1,58 +1,72 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   routines.c                                         :+:      :+:    :+:   */
+/*   dinner_routine.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 18:50:12 by aaespino          #+#    #+#             */
-/*   Updated: 2023/11/22 19:47:23 by aaespino         ###   ########.fr       */
+/*   Updated: 2023/11/23 16:31:57 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-void	one_philo()
-{   
-	
-}
-
-void	monitor()
-{    
-	
-}
-
 bool	check_state(t_mutex *mutex, bool *val)
 {
 	bool ret;
 
-	if (pthread_mutex_lock(mutex) == 0)
-		return (NULL);
+	pthread_mutex_lock(mutex);
 	ret = *val;
-	if (pthread_mutex_unlock(mutex) == 0)
-		return (NULL);
+	pthread_mutex_unlock(mutex);
 	return (ret);
 }
 
-void	wait_threads(t_table *table)
+static void	wait_threads(t_table *table)
 {
-	while (!check_state(&table->table_mutex, table->threads_ready))
+	while (!check_state(&table->table_mutex, &table->threads_ready))
 		;
 }
 
-void	*dinner_routine(t_philo *philo)
-{ 
+static void	set_last_meal(t_mutex *mutex, long *dest, long value)
+{
+	pthread_mutex_lock(mutex);
+	*dest = value;
+	pthread_mutex_unlock(mutex);
+}
+
+static void increase_meals(t_mutex *mutex, long *count)
+{
+	pthread_mutex_lock(mutex);
+	count++;
+	pthread_mutex_unlock(mutex);
+}
+
+static void assign_turns(t_philo *philo)
+{
+	philo = NULL;
+	// if (philo->philo_id % 2 == 0)
+	// 	eating(philo);
+	// else
+	// 	thinking(philo);
+}
+
+void	*dinner_routine(void *data)
+{
+	t_philo *philo;
+
+	philo = (t_philo *)data;
 	wait_threads(philo->table);
-	//ponemos el lastmealtime con gettime
-	//aumenta threads_running
-	//repartir los turnos de comida, pares primero, impares piensan
+	set_last_meal(&philo->philo_mutex, &philo->data->last_meal_time, ft_get_time());
+	increase_meals(&philo->philo_mutex, &philo->data->threads_running);
+	assign_turns (philo);
 	//mientras simulation no termina
 		//si get_bool devuelve que el philo esta lleno BREAK
 		//comer
 		//sleep
 		//pensar
+	return (NULL);
 }
-
 /*
 static void    *dinner_simulation(void *data)	//Dinner simu recibe cualquier data (void *data)
 {

@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 22:08:22 by aaronespino       #+#    #+#             */
-/*   Updated: 2023/11/22 15:45:32 by aaespino         ###   ########.fr       */
+/*   Updated: 2023/11/23 17:14:12 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,11 @@
 static int comprove_argv(char *arg)
 {
     if (ft_atol(arg) > INT_MAX)
-        ft_error ("INT MAX is the limit sweetie");
-    else if (ft_atol(arg) < INT_MIN)
-        ft_error ("INT MAX is the limit sweetie");
-    else
-        return (ft_atoi(arg));
-        
+        return (ft_error ("INT MAX is the limit sweetie"));
+    return (ft_atoi(arg));
 }
 
-void    parse_input(t_data *data, t_table *table, char **argv)
+void    parse_input(t_data *data, char **argv)
 {
     data->philo_nbr = comprove_argv(argv[1]);
     data->time_to_die = comprove_argv(argv[2]) * 1000;
