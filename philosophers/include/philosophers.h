@@ -71,7 +71,7 @@ typedef struct s_philo
 	int			philo_id;
 	int			philo_position;
 	long		meals_count;
-	t_thread	*thread_id;
+	t_thread	thread_id;
 	t_mutex		philo_mutex;
 	t_fork		*left;
 	t_fork		*right;

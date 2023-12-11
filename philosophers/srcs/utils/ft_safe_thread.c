@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 18:13:57 by aaespino          #+#    #+#             */
-/*   Updated: 2023/11/23 18:43:32 by aaespino         ###   ########.fr       */
+/*   Updated: 2023/12/11 19:50:25 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,10 @@
 
 static bool	handle_error (int status, t_pthread_code code)
 {
-	printf("AYAYA\n\n\n");
-	printf ("\n\nSTATUS: %d\n\n", status);
+	printf("Hilo creado con exito\n");
 	if (!status)
 		return (true);
-	if (EAGAIN == status)
+	else if (EAGAIN == status)
 		return (ft_error ("Thread creation failed: resource or limit issue."));
 	else if (EPERM == status)
 		return (ft_error ("Caller lacks permission to set scheduling parameters."));
@@ -38,16 +37,11 @@ static bool	handle_error (int status, t_pthread_code code)
 
 bool	ft_safe_thread(t_thread *thread, void *(*function)(void *), void *data, t_pthread_code code)
 {
-	int	n;
-	
-	printf("HELLO %d\n", code);
+	printf("%d\n", code);
 	if (CREATE == code)
 	{
-		printf("Creating\n");
-		
-		n = pthread_create(thread, NULL, function, data);
-		printf("N: %d\n", n);
-		return (handle_error(n, code));
+		printf("Creando hilo en safe_thread\n");
+		return (handle_error(pthread_create(thread, NULL, function, data), code));
 	}
 	if (JOIN == code)
 		return (handle_error(pthread_join(*thread, NULL), code));
@@ -56,4 +50,5 @@ bool	ft_safe_thread(t_thread *thread, void *(*function)(void *), void *data, t_p
 	else
 		return (ft_error("Wrong code for ft_safe_thread: \n"
 			GREEN"use <CREATE> <JOIN> <DETACH>"RESET));
+	return (NULL);
 }

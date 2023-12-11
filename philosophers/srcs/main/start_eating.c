@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 16:58:18 by aaespino          #+#    #+#             */
-/*   Updated: 2023/11/23 18:35:55 by aaespino         ###   ########.fr       */
+/*   Updated: 2023/12/11 19:43:25 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,23 +16,23 @@ static bool	call_philosophers(t_table *table, t_data *data)
 {
 	long i;
 
-    i = 0;
+    i = 1;
     if (!data->limit_meals_nbr)
         return (NULL);
-    else if (data->limit_meals_nbr == 1)
+    else if (data->philo_nbr == 1)
     {
-        if (!(ft_safe_thread(table->philos[0].thread_id, one_philo, 
+        if (!(ft_safe_thread(&table->philos[0].thread_id, one_philo, 
                 &table->philos[0], CREATE)))
             return (NULL);
     }
     else
     {
-        while (i < data->philo_nbr)
+        while (++i < data->philo_nbr)
         {
-            if (!(ft_safe_thread(table->philos[i].thread_id, dinner_routine, 
+            printf("Estoy en call_philosophers\n");
+            if (!(ft_safe_thread(&table->philos[i].thread_id, dinner_routine, 
                 &table->philos[i], CREATE)))
                 return (NULL);
-            i++;
         }
     }
     if (!(ft_safe_thread(&table->monitor, monitor, 
@@ -49,7 +49,7 @@ static void handle_threads(t_table *table, t_data *data)
     i = 0;
     while (i < data->philo_nbr)
     {
-        pthread_join(*table->philos[i].thread_id, NULL);
+        pthread_join(table->philos[i].thread_id, NULL);
         i++;
     }
 }
