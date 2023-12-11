@@ -9,6 +9,7 @@
 # include <stdbool.h>
 # include <limits.h>
 # include <errno.h>
+
 #define RESET   "\033[0m"
 #define RED     "\033[1;31m"
 #define GREEN   "\033[1;32m"
@@ -102,7 +103,6 @@ bool		ft_error(char *str);
 bool		ft_found(char c, char *str);
 u_int64_t	ft_get_time(void);
 int			ft_input_checker(char **argv);
-void	    *ft_safe_malloc(size_t bytes);
 bool		ft_safe_mutex(t_mutex *mutex, t_mutex_code code);
 bool		ft_safe_thread(t_thread *thread, void *(*function)(void *), void *data, t_pthread_code code);
 int			ft_strcmp(const char *s1, const char *s2);
