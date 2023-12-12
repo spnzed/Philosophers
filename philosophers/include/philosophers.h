@@ -28,6 +28,7 @@ typedef enum e_philo_code
 	EAT,
 	SLEEP,
     THINK,
+	FORK,
 }	t_philo_code;
 
 typedef enum e_pthread_code
@@ -81,6 +82,7 @@ typedef struct s_philo
 	long		meals_count;
 	t_thread	thread_id;
 	t_mutex		philo_mutex;
+	t_mutex		write_mutex;
 	t_fork		*left;
 	t_fork		*right;
 	t_table		*table;

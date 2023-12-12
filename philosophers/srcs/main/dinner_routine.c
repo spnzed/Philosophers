@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 18:50:12 by aaespino          #+#    #+#             */
-/*   Updated: 2023/12/12 17:54:47 by aaespino         ###   ########.fr       */
+/*   Updated: 2023/12/12 19:21:18 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,7 @@ void print_action(t_philo *philo, char *str)
 {
 	philo->data->start_simulation = ft_get_time();
 	if (philo->dead == false)
-	{
    		printf(BLUE"%ld ms \t" WHITE" %d %s\n"RESET, philo->data->start_simulation, philo->philo_id, str);
-	}
 }
 
 bool eat(t_philo *philo)
@@ -40,7 +38,8 @@ bool eat(t_philo *philo)
 
 void philo_does(t_philo_code code, t_philo *philo)
 {
-	ft_safe_mutex(&philo->philo_mutex, LOCK);
+	printf(BLUE"HASTA AQUI 🥶\n"RESET);
+	ft_safe_mutex(&philo->write_mutex, LOCK);
 	if (EAT == code)
 	{
 		print_action(philo, YELLOW"is eating");
@@ -57,12 +56,8 @@ void philo_does(t_philo_code code, t_philo *philo)
 		ft_usleep((useconds_t) philo->data->time_to_eat);
 	}
 	else
-	{
-		ft_error("Wrong code for philo_does: \n"
-			GREEN"use <EAT> <SLEEP> <THINK>"RESET);
-	}
-	printf("HOLA\n");
-	ft_safe_mutex (&philo->philo_mutex, UNLOCK);
+		ft_error("Wrong code for philo_does: \n" GREEN"use <EAT> <SLEEP> <THINK>"RESET);
+	ft_safe_mutex (&philo->write_mutex, UNLOCK);
 }
 
 static void assign_turns(t_philo *philo)
@@ -79,9 +74,7 @@ void	*dinner_routine(void *data)
 	philo = (t_philo *)data;
 	ft_safe_mutex(&philo->philo_mutex, LOCK);
 	ft_safe_mutex(&philo->philo_mutex, UNLOCK);
-	printf("Haciendo rutina\n");
 	philo_does(THINK, philo);
-	printf("HASTA AQUI 🥶\n");
 	assign_turns (philo);
 	while (!philo->dead)
 	{

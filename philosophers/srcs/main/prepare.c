@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 15:30:46 by aaespino          #+#    #+#             */
-/*   Updated: 2023/12/12 17:36:22 by aaespino         ###   ########.fr       */
+/*   Updated: 2023/12/12 19:08:50 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ static bool	prepare_philos(t_philo *philo, t_fork *forks, int i, long nbr)
 	philo->philo_position = i;
 	philo->philo_id = i + 1;
 	if (!(ft_safe_mutex(&philo->philo_mutex, INIT)))
+    	return (NULL);	
+	if (!(ft_safe_mutex(&philo->write_mutex, INIT)))
     	return (NULL);
 	assign_forks(&philo[i], forks, nbr);
 	return (true);
