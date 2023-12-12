@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 18:13:57 by aaespino          #+#    #+#             */
-/*   Updated: 2023/11/23 17:30:36 by aaespino         ###   ########.fr       */
+/*   Updated: 2023/12/12 15:53:34 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,15 @@ static bool	handle_error(int status, t_mutex_code code)
 bool	ft_safe_mutex(t_mutex *mutex, t_mutex_code code)
 {
 	if (LOCK == code)
+	{
+		printf(RED"LOCKING MUTEX\n"RESET);
 		return (handle_error(pthread_mutex_lock(mutex), code));
+	}
 	if (UNLOCK == code)
+	{
+		printf(GREEN"UNLOCKING MUTEX\n"RESET);
 		return (handle_error(pthread_mutex_unlock(mutex), code));
+	}
 	if (INIT == code)
 		return (handle_error(pthread_mutex_init(mutex, NULL), code));
 	if (DESTROY == code)

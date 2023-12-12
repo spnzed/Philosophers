@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 18:13:57 by aaespino          #+#    #+#             */
-/*   Updated: 2023/12/11 19:50:25 by aaespino         ###   ########.fr       */
+/*   Updated: 2023/12/12 16:01:29 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 static bool	handle_error (int status, t_pthread_code code)
 {
-	printf("Hilo creado con exito\n");
 	if (!status)
 		return (true);
 	else if (EAGAIN == status)
@@ -37,12 +36,8 @@ static bool	handle_error (int status, t_pthread_code code)
 
 bool	ft_safe_thread(t_thread *thread, void *(*function)(void *), void *data, t_pthread_code code)
 {
-	printf("%d\n", code);
 	if (CREATE == code)
-	{
-		printf("Creando hilo en safe_thread\n");
 		return (handle_error(pthread_create(thread, NULL, function, data), code));
-	}
 	if (JOIN == code)
 		return (handle_error(pthread_join(*thread, NULL), code));
 	if (DETACH == code)

@@ -21,6 +21,7 @@ SRCS        :=            srcs/philosophers.c \
                           srcs/utils/ft_error.c \
                           srcs/utils/ft_exit.c \
                           srcs/utils/ft_found.c \
+                          srcs/utils/ft_get_act_time.c \
                           srcs/utils/ft_get_time.c \
                           srcs/utils/ft_input_check.c \
                           srcs/utils/ft_safe_mutex.c \

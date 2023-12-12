@@ -9,6 +9,7 @@
 # include <stdbool.h>
 # include <limits.h>
 # include <errno.h>
+# include <inttypes.h>
 
 #define RESET   "\033[0m"
 #define RED     "\033[1;31m"
@@ -21,6 +22,13 @@
 
 typedef pthread_t 			t_thread;
 typedef pthread_mutex_t 	t_mutex;
+
+typedef enum e_philo_code
+{
+	EAT,
+	SLEEP,
+    THINK,
+}	t_philo_code;
 
 typedef enum e_pthread_code
 {
@@ -46,9 +54,9 @@ typedef struct s_data
 	long		time_to_eat;
 	long		time_to_sleep;
 	long		limit_meals_nbr;
-	u_int64_t	start_simulation;
-	long		threads_running;
+	long		start_simulation;
 	long		last_meal_time;
+	long		threads_running;
 }	t_data;
 
 typedef struct s_fork
@@ -78,6 +86,7 @@ typedef struct s_philo
 	t_table		*table;
 	t_data		*data;
 	bool		full;
+	bool		dead;
 }	t_philo;
 
 //***************    PROTOTYPES     ***************
@@ -89,11 +98,13 @@ void    	parse_input(t_data *data, char **argv);
 //init table and philos data
 bool		prepare_table(t_table *table, t_data *data);
 //🥩
-bool		start_eating(t_table *table, t_data *data);
+bool		start_dinning(t_table *table, t_data *data);
 //routines
 void		*one_philo(void *pointer);
 void		*dinner_routine(void *data);
 void		*monitor(void *);
+void 		philo_does(t_philo_code code, t_philo *philo);
+
 
 //***	utils	***
 int			ft_atoi(const char *str);
@@ -101,7 +112,7 @@ long		ft_atol(const char *str);
 void		ft_clear_data(t_table *table);
 bool		ft_error(char *str);
 bool		ft_found(char c, char *str);
-u_int64_t	ft_get_time(void);
+long		ft_get_time(void);
 int			ft_input_checker(char **argv);
 bool		ft_safe_mutex(t_mutex *mutex, t_mutex_code code);
 bool		ft_safe_thread(t_thread *thread, void *(*function)(void *), void *data, t_pthread_code code);

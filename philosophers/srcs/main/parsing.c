@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 22:08:22 by aaronespino       #+#    #+#             */
-/*   Updated: 2023/11/23 17:14:12 by aaespino         ###   ########.fr       */
+/*   Updated: 2023/12/12 16:52:00 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void    parse_input(t_data *data, char **argv)
     data->time_to_die = comprove_argv(argv[2]) * 1000;
     data->time_to_eat = comprove_argv(argv[3]) * 1000;
     data->time_to_sleep = comprove_argv(argv[4]) * 1000;
+    data->start_simulation = 0;
     if (argv[5])
         data->limit_meals_nbr = comprove_argv(argv[5]);
     else

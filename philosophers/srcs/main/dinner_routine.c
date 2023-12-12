@@ -6,88 +6,90 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 18:50:12 by aaespino          #+#    #+#             */
-/*   Updated: 2023/12/11 19:51:25 by aaespino         ###   ########.fr       */
+/*   Updated: 2023/12/12 17:54:47 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-bool	check_state(t_mutex *mutex, bool *val)
+void print_action(t_philo *philo, char *str)
 {
-	bool ret;
-
-	pthread_mutex_lock(mutex);
-	ret = *val;
-	pthread_mutex_unlock(mutex);
-	return (ret);
+	philo->data->start_simulation = ft_get_time();
+	if (philo->dead == false)
+	{
+   		printf(BLUE"%ld ms \t" WHITE" %d %s\n"RESET, philo->data->start_simulation, philo->philo_id, str);
+	}
 }
 
-static void	wait_threads(t_table *table)
+bool eat(t_philo *philo)
 {
-	while (!check_state(&table->table_mutex, &table->threads_ready))
-		;
+	if (philo->data->limit_meals_nbr)
+		if (philo->meals_count >= philo->data->limit_meals_nbr)
+			return (NULL);
+	ft_safe_mutex(&philo->left->fork, LOCK);
+	print_action(philo, YELLOW"has taken a fork");
+	ft_safe_mutex(&philo->right->fork, LOCK);
+	print_action(philo, YELLOW"has taken a fork");
+	philo->meals_count++;
+	philo_does (EAT, philo);
+	philo->data->last_meal_time = ft_get_time();
+	ft_safe_mutex(&philo->left->fork, UNLOCK);
+	ft_safe_mutex(&philo->right->fork, UNLOCK);
+	return (NULL);
 }
 
-static void	set_last_meal(t_mutex *mutex, long *dest, long value)
+void philo_does(t_philo_code code, t_philo *philo)
 {
-	pthread_mutex_lock(mutex);
-	*dest = value;
-	pthread_mutex_unlock(mutex);
-}
-
-static void increase_meals(t_mutex *mutex, long *count)
-{
-	pthread_mutex_lock(mutex);
-	count++;
-	pthread_mutex_unlock(mutex);
+	ft_safe_mutex(&philo->philo_mutex, LOCK);
+	if (EAT == code)
+	{
+		print_action(philo, YELLOW"is eating");
+		ft_usleep((useconds_t) philo->data->time_to_eat);
+	}
+	if (SLEEP == code)
+	{
+		print_action(philo, CYAN"is sleeping");
+		ft_usleep((useconds_t) philo->data->time_to_sleep);
+	}
+	if (THINK == code)
+	{
+		print_action(philo, WHITE"is thinking");
+		ft_usleep((useconds_t) philo->data->time_to_eat);
+	}
+	else
+	{
+		ft_error("Wrong code for philo_does: \n"
+			GREEN"use <EAT> <SLEEP> <THINK>"RESET);
+	}
+	printf("HOLA\n");
+	ft_safe_mutex (&philo->philo_mutex, UNLOCK);
 }
 
 static void assign_turns(t_philo *philo)
 {
 	philo = NULL;
-	// if (philo->philo_id % 2 == 0)
-	// 	eating(philo);
-	// else
-	// 	thinking(philo);
+	if (philo->philo_id % 2 == 0)
+		philo_does(EAT, philo);
 }
 
 void	*dinner_routine(void *data)
 {
 	t_philo *philo;
 
-	printf("Haciendo rutina\n");
 	philo = (t_philo *)data;
-	wait_threads(philo->table);
-	set_last_meal(&philo->philo_mutex, &philo->data->last_meal_time, ft_get_time());
-	increase_meals(&philo->philo_mutex, &philo->data->threads_running);
+	ft_safe_mutex(&philo->philo_mutex, LOCK);
+	ft_safe_mutex(&philo->philo_mutex, UNLOCK);
+	printf("Haciendo rutina\n");
+	philo_does(THINK, philo);
+	printf("HASTA AQUI 🥶\n");
 	assign_turns (philo);
-	//mientras simulation no termina
-		//si get_bool devuelve que el philo esta lleno BREAK
-		//comer
-		//sleep
-		//pensar
+	while (!philo->dead)
+	{
+		philo_does(SLEEP, philo);
+		philo_does(THINK, philo);
+		if (philo->data->limit_meals_nbr > 0 
+			&& philo->meals_count >= philo->data->limit_meals_nbr)
+			philo->dead = true;
+	}
 	return (NULL);
 }
-/*
-static void    *dinner_simulation(void *data)	//Dinner simu recibe cualquier data (void *data)
-{
-    t_philo        *philo;
-
-    philo = (t_philo *)data;
-    wait_all_threads(philo->table);				//haremos un boolean que devuelve si los threads son utilizables
-    set_long(&philo->philo_mutex, &philo->last_meal_time, 
-        gettime(MILLISECOND));					//ponemos el lastmealtime con gettime
-    increase_long(&philo->table->table_mutex,
-        &philo->table->threads_running_nbr);	//aumenta threads_running
-    de_synchronize_philos(philo);				//repartir los turnos de comida, pares primero, impares piensan
-    while (!simulation_finished(philo->table))	//mientras simulation no termina
-    {
-        if (get_bool(&philo->philo_mutex, &philo->full))//si get_bool devuelve que el philo esta lleno BREAK
-            break ;
-        eat(philo);								//comer
-        precise_usleep(philo->table->time_to_sleep, philo->table);//sleep
-        thinking(philo, false);					//pensar
-    }
-    return (NULL);
-}
-*/

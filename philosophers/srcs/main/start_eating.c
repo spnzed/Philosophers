@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 16:58:18 by aaespino          #+#    #+#             */
-/*   Updated: 2023/12/11 19:43:25 by aaespino         ###   ########.fr       */
+/*   Updated: 2023/12/12 17:46:12 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static bool	call_philosophers(t_table *table, t_data *data)
 {
 	long i;
 
-    i = 1;
+    i = 0;
     if (!data->limit_meals_nbr)
         return (NULL);
     else if (data->philo_nbr == 1)
@@ -27,12 +27,12 @@ static bool	call_philosophers(t_table *table, t_data *data)
     }
     else
     {
-        while (++i < data->philo_nbr)
+        while (i < data->philo_nbr)
         {
-            printf("Estoy en call_philosophers\n");
             if (!(ft_safe_thread(&table->philos[i].thread_id, dinner_routine, 
                 &table->philos[i], CREATE)))
                 return (NULL);
+            i++;
         }
     }
     if (!(ft_safe_thread(&table->monitor, monitor, 
@@ -54,7 +54,7 @@ static void handle_threads(t_table *table, t_data *data)
     }
 }
 
-bool    start_eating (t_table *table, t_data *data)
+bool    start_dinning (t_table *table, t_data *data)
 {
     if (!(call_philosophers(table, data)))
         return (NULL);

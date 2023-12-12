@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 15:30:46 by aaespino          #+#    #+#             */
-/*   Updated: 2023/11/23 18:05:03 by aaespino         ###   ########.fr       */
+/*   Updated: 2023/12/12 17:36:22 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,29 @@ static void assign_forks(t_philo *philo, t_fork *fork, long philo_nbr)
 	}
 }
 
-static void	prepare_philos(t_philo *philo, t_fork *forks, int i, long nbr)
+static bool	prepare_philos(t_philo *philo, t_fork *forks, int i, long nbr)
 {
 	philo->meals_count = 0;
 	philo->full = false;
+	philo->dead = false;
 	philo->philo_position = i;
 	philo->philo_id = i + 1;
+	if (!(ft_safe_mutex(&philo->philo_mutex, INIT)))
+    	return (NULL);
 	assign_forks(&philo[i], forks, nbr);
+	return (true);
+}
+
+static void	assign_table_data(t_philo *philo, t_data *data)
+{
+	philo->data->philo_nbr = data->philo_nbr;
+	philo->data->time_to_die = data->time_to_die;
+	philo->data->time_to_eat = data->time_to_eat;
+	philo->data->time_to_sleep = data->time_to_sleep;
+	philo->data->limit_meals_nbr = data->limit_meals_nbr;
+	philo->data->start_simulation = 0;
+	philo->data->last_meal_time = 0;
+	philo->data->threads_running = 0;
 }
 
 bool	prepare_table(t_table *table, t_data *data)
@@ -52,9 +68,14 @@ bool	prepare_table(t_table *table, t_data *data)
 	{
 		if (!(ft_safe_mutex(&table->forks[i].fork, INIT)))
         	return (NULL);
+		table->philos[i].data = malloc(sizeof(t_data));
+		if (!table->philos[i].data)
+			return (NULL);
+		assign_table_data(&table->philos[i], data);
 		table->forks[i].fork_id = i;
 		table->philos[i].table = table;
-		prepare_philos(&table->philos[i], &table->forks[i], i, nbr);
+		if (!(prepare_philos(&table->philos[i], &table->forks[i], i, nbr)))
+        	return (NULL);
 		i++;
 	}
 	return (true);
