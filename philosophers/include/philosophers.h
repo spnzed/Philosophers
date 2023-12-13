@@ -29,6 +29,7 @@ typedef enum e_philo_code
 	SLEEP,
     THINK,
 	FORK,
+	DIE,
 }	t_philo_code;
 
 typedef enum e_pthread_code
@@ -105,8 +106,9 @@ bool		start_dinning(t_table *table, t_data *data);
 //routines
 void		*one_philo(void *pointer);
 void		*dinner_routine(void *data);
-void		*monitor(void *);
+void		*monitor(t_table *table);
 void 		philo_does(t_philo_code code, t_philo *philo);
+void		*dead(t_philo *philo);
 
 
 //***	utils	***
