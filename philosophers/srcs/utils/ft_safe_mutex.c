@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 18:13:57 by aaespino          #+#    #+#             */
-/*   Updated: 2023/12/12 15:53:34 by aaespino         ###   ########.fr       */
+/*   Updated: 2023/12/13 17:01:25 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,12 @@ bool	ft_safe_mutex(t_mutex *mutex, t_mutex_code code)
 {
 	if (LOCK == code)
 	{
-		printf(RED"LOCKING MUTEX\n"RESET);
+		//printf(RED"LOCKING MUTEX\n"RESET);
 		return (handle_error(pthread_mutex_lock(mutex), code));
 	}
 	if (UNLOCK == code)
 	{
-		printf(GREEN"UNLOCKING MUTEX\n"RESET);
+		//printf(GREEN"UNLOCKING MUTEX\n"RESET);
 		return (handle_error(pthread_mutex_unlock(mutex), code));
 	}
 	if (INIT == code)

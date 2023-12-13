@@ -55,7 +55,7 @@ typedef struct s_data
 	long		time_to_eat;
 	long		time_to_sleep;
 	long		limit_meals_nbr;
-	long		start_simulation;
+	uint64_t	start_simulation;
 	long		last_meal_time;
 	long		threads_running;
 }	t_data;
@@ -73,6 +73,7 @@ typedef struct s_table
 	t_philo		*philos;
 	t_thread	monitor;
 	t_mutex		table_mutex;
+	t_mutex		write_mutex;
 }	t_table;
 
 typedef struct s_philo
@@ -81,8 +82,8 @@ typedef struct s_philo
 	int			philo_position;
 	long		meals_count;
 	t_thread	thread_id;
-	t_mutex		philo_mutex;
-	t_mutex		write_mutex;
+	t_mutex		*philo_mutex;
+	t_mutex		*write_mutex;
 	t_fork		*left;
 	t_fork		*right;
 	t_table		*table;
@@ -114,11 +115,11 @@ long		ft_atol(const char *str);
 void		ft_clear_data(t_table *table);
 bool		ft_error(char *str);
 bool		ft_found(char c, char *str);
-long		ft_get_time(void);
+u_int64_t	ft_get_time(void);
 int			ft_input_checker(char **argv);
 bool		ft_safe_mutex(t_mutex *mutex, t_mutex_code code);
 bool		ft_safe_thread(t_thread *thread, void *(*function)(void *), void *data, t_pthread_code code);
 int			ft_strcmp(const char *s1, const char *s2);
-int			ft_usleep(useconds_t time);
+int			ft_usleep(long time);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 15:30:46 by aaespino          #+#    #+#             */
-/*   Updated: 2023/12/12 19:08:50 by aaespino         ###   ########.fr       */
+/*   Updated: 2023/12/13 16:20:26 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,8 @@ static bool	prepare_philos(t_philo *philo, t_fork *forks, int i, long nbr)
 	philo->dead = false;
 	philo->philo_position = i;
 	philo->philo_id = i + 1;
-	if (!(ft_safe_mutex(&philo->philo_mutex, INIT)))
-    	return (NULL);	
-	if (!(ft_safe_mutex(&philo->write_mutex, INIT)))
-    	return (NULL);
+	philo->philo_mutex = &philo->table->table_mutex;
+	philo->write_mutex = &philo->table->write_mutex;
 	assign_forks(&philo[i], forks, nbr);
 	return (true);
 }
@@ -66,6 +64,10 @@ bool	prepare_table(t_table *table, t_data *data)
 	table->forks = malloc(data->philo_nbr * sizeof(t_fork));
 	if (!table->forks)
 		return (NULL);
+	if (!(ft_safe_mutex(&table->table_mutex, INIT)))
+    	return (NULL);	
+	if (!(ft_safe_mutex(&table->write_mutex, INIT)))
+    	return (NULL);
 	while (i < data->philo_nbr)
 	{
 		if (!(ft_safe_mutex(&table->forks[i].fork, INIT)))
