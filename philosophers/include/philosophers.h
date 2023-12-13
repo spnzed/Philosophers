@@ -106,7 +106,7 @@ bool		start_dinning(t_table *table, t_data *data);
 //routines
 void		*one_philo(void *pointer);
 void		*dinner_routine(void *data);
-void		*monitor(t_table *table);
+void		*monitor(void *data);
 void 		philo_does(t_philo_code code, t_philo *philo);
 void		*dead(t_philo *philo);
 

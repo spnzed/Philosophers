@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 16:58:18 by aaespino          #+#    #+#             */
-/*   Updated: 2023/12/12 17:46:12 by aaespino         ###   ########.fr       */
+/*   Updated: 2023/12/13 19:41:26 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ bool    start_dinning (t_table *table, t_data *data)
     if (!(call_philosophers(table, data)))
         return (NULL);
     //lock->mutex and ✅ bool "threadsready"
+    printf (CYAN"HOLA\n"RESET);
     handle_threads(table, data);
     //(UN)?lock->mutex and ✅ bool "endsimu"
     pthread_join(table->monitor, NULL);

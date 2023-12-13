@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 15:28:24 by aaespino          #+#    #+#             */
-/*   Updated: 2023/12/13 19:27:35 by aaespino         ###   ########.fr       */
+/*   Updated: 2023/12/13 19:39:49 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,14 @@ void	*one_philo(void *pointer)
 	return (pointer);
 }
 
-void	*monitor(t_table *table)
+void	*monitor(void *data)
 {
 	int		i;
 	long 	nbr;
 	long 	time;
+	t_table *table;
 
+	table = (t_table *)data;
 	nbr = table->philos->data->philo_nbr;
 	while (!table->philos->dead)
 	{
