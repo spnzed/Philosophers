@@ -6,11 +6,52 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 22:08:22 by aaronespino       #+#    #+#             */
-/*   Updated: 2023/12/13 16:55:15 by aaespino         ###   ########.fr       */
+/*   Updated: 2023/12/14 14:39:59 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
+
+void	assign_table_data(t_philo *philo, t_data *data)
+{
+	philo->data->philo_nbr = data->philo_nbr;
+	philo->data->time_to_die = data->time_to_die;
+	philo->data->time_to_eat = data->time_to_eat;
+	philo->data->time_to_sleep = data->time_to_sleep;
+	philo->data->limit_meals_nbr = data->limit_meals_nbr;
+	philo->data->start_simulation = 0;
+	philo->data->last_meal_time = 0;
+	philo->data->threads_running = 0;
+}
+
+bool	init_mutex(t_table *table, t_data *data)
+{
+	int i;
+
+	i = 0;
+	if (!(ft_safe_mutex(&table->table_mutex, INIT)))
+    	return (NULL);	
+	if (!(ft_safe_mutex(&table->write_mutex, INIT)))
+    	return (NULL);
+	while (i < data->philo_nbr)
+	{
+		if (!(ft_safe_mutex(&table->forks[i].fork, INIT)))
+        	return (NULL);
+		i++;
+	}
+	return (true);
+}
+
+bool	init_malloc(t_table *table, t_data *data)
+{
+	table->philos = malloc(data->philo_nbr * sizeof(t_philo));
+	if (!table->philos)
+		return (NULL);
+	table->forks = malloc(data->philo_nbr * sizeof(t_fork));
+	if (!table->forks)
+		return (NULL);
+	return (true);
+}
 
 //  5       Number of philos
 //  800     Time the table will die if doesnt eat

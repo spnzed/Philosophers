@@ -1,16 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   start_eating.c                                     :+:      :+:    :+:   */
+/*   start_dinner.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 16:58:18 by aaespino          #+#    #+#             */
-/*   Updated: 2023/12/13 19:41:26 by aaespino         ###   ########.fr       */
+/*   Updated: 2023/12/14 19:16:54 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
+
+static void handle_threads(t_table *table, t_data *data)
+{
+    int i;
+
+    i = -1;
+    while (++i < data->philo_nbr)
+        ft_safe_thread(&table->philos[i].thread_id, NULL, NULL, JOIN);
+}
 
 static bool	call_philosophers(t_table *table, t_data *data)
 {
@@ -36,32 +45,19 @@ static bool	call_philosophers(t_table *table, t_data *data)
         }
     }
     if (!(ft_safe_thread(&table->monitor, monitor, 
-               &table, CREATE)))
+               table, CREATE)))
         return (NULL);
     data->start_simulation = ft_get_time();
-    return (true);
-}
-
-static void handle_threads(t_table *table, t_data *data)
-{
-    int i;
-
-    i = 0;
-    while (i < data->philo_nbr)
-    {
-        pthread_join(table->philos[i].thread_id, NULL);
-        i++;
-    }
+    safe_put_bool (&table->table_mutex, &table->threads_ready, true);
+    handle_threads (table, data);
+    safe_put_bool (&table->table_mutex, &table->end_simu, true);
+    ft_safe_thread(&table->monitor, NULL, NULL, JOIN);
+    return(true);
 }
 
 bool    start_dinning (t_table *table, t_data *data)
 {
     if (!(call_philosophers(table, data)))
         return (NULL);
-    //lock->mutex and ✅ bool "threadsready"
-    printf (CYAN"HOLA\n"RESET);
-    handle_threads(table, data);
-    //(UN)?lock->mutex and ✅ bool "endsimu"
-    pthread_join(table->monitor, NULL);
     return (true);
 }

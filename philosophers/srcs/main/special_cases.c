@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 15:28:24 by aaespino          #+#    #+#             */
-/*   Updated: 2023/12/13 19:39:49 by aaespino         ###   ########.fr       */
+/*   Updated: 2023/12/14 20:04:26 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,55 +14,50 @@
 
 void	*one_philo(void *pointer)
 {
-	pointer = NULL;
-	return (pointer);
+	t_philo	*philo;
+	bool	simulation;
+
+	simulation = false;
+	philo = (t_philo *)pointer;
+	philo->data->start_simulation = ft_get_time();
+	safe_put_long(philo->philo_mutex, &philo->data->last_meal_time, ft_get_time());
+	safe_increase_long(&philo->table->table_mutex, &philo->table->table_data->threads_running);
+	print_action(philo, YELLOW"has taken a fork \t [🍴]");
+	while (!simulation)
+	{
+		simulation = safe_get_bool(&philo->table->table_mutex, &philo->table->end_simu);
+		ft_usleep(20);
+		safe_put_bool (&philo->table->table_mutex, &philo->table->end_simu, true);
+	}
+	return (NULL);
 }
 
 void	*monitor(void *data)
 {
-	int		i;
-	long 	nbr;
-	long 	time;
 	t_table *table;
+	bool	full;
+	long 	nbr;
+	long 	time_to_die;
+	long 	time;
+	int		i;
 
 	table = (t_table *)data;
-	nbr = table->philos->data->philo_nbr;
-	while (!table->philos->dead)
+	full = false;
+	nbr = safe_get_long(&table->table_mutex, table->table_data->philo_nbr);
+	time_to_die = safe_get_long(&table->table_mutex, table->table_data->time_to_die);
+	while (!full)
 	{
 		i = 0;
 		while (i < nbr)
 		{
-			time = table->philos->data->last_meal_time;
-			if (time > table->philos->data->time_to_die)
+			time = safe_get_long(&table->table_mutex, table->table_data->last_meal_time);
+			if (time > time_to_die)
 			{
 				dead(&table->philos[i]);
 				return (NULL);
 			}
 		}
+		full = safe_get_bool(&table->table_mutex, &table->philos->full);
 	}
 	return (NULL);
 }
-
-// void	*death_check(t_table *table)
-// {
-// 	int			i;
-// 	int			n;
-// 	long long	time;
-
-// 	n = table->data.philo_amount;
-// 	while (1 && !table->data.dead)
-// 	{
-// 		i = 0;
-// 		while (i < n)
-// 		{
-// 			time = get_time_ms(table->philos[i].last_meal);
-// 			if (time > table->philos[i].data->time_to_die)
-// 			{
-// 				philo_dead(&table->philos[i]);
-// 				return (NULL);
-// 			}
-// 		}
-// 		usleep_wrapper(100, table->data.dead);
-// 	}
-// 	return (NULL);
-// }

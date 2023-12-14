@@ -56,7 +56,7 @@ typedef struct s_data
 	long		time_to_eat;
 	long		time_to_sleep;
 	long		limit_meals_nbr;
-	uint64_t	start_simulation;
+	long		start_simulation;
 	long		last_meal_time;
 	long		threads_running;
 }	t_data;
@@ -70,11 +70,13 @@ typedef struct s_fork
 typedef struct s_table
 {
 	bool		threads_ready;
+	bool		end_simu;
 	t_fork		*forks;
 	t_philo		*philos;
 	t_thread	monitor;
 	t_mutex		table_mutex;
 	t_mutex		write_mutex;
+	t_data		*table_data;
 }	t_table;
 
 typedef struct s_philo
@@ -99,6 +101,10 @@ typedef struct s_philo
 
 //process the input
 void    	parse_input(t_data *data, char **argv);
+void		assign_table_data(t_philo *philo, t_data *data);
+bool		init_malloc(t_table *table, t_data *data);
+bool		init_mutex(t_table *table, t_data *data);
+
 //init table and philos data
 bool		prepare_table(t_table *table, t_data *data);
 //🥩
@@ -108,8 +114,19 @@ void		*one_philo(void *pointer);
 void		*dinner_routine(void *data);
 void		*monitor(void *data);
 void 		philo_does(t_philo_code code, t_philo *philo);
-void		*dead(t_philo *philo);
+void	    safe_bool (t_mutex *mutex, bool *dest, bool val);
+//safe_data
+void		safe_increase_long(t_mutex *mutex, long *count);
+void		safe_put_long(t_mutex *mutex, long *dest, long value);
+void		safe_put_bool (t_mutex *mutex, bool *dest, bool val);
+bool		safe_get_bool(t_mutex *mutex, bool *val);
+long		safe_get_long(t_mutex *mutex, long value);
 
+//actions
+void 	print_action(t_philo *philo, char *str);
+bool	dead(t_philo *philo);
+bool 	eat(t_philo *philo);
+void 	philo_does(t_philo_code code, t_philo *philo);
 
 //***	utils	***
 int			ft_atoi(const char *str);
