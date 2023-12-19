@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 22:08:22 by aaronespino       #+#    #+#             */
-/*   Updated: 2023/12/14 14:39:59 by aaespino         ###   ########.fr       */
+/*   Updated: 2023/12/19 19:50:59 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ void	assign_table_data(t_philo *philo, t_data *data)
 	philo->data->time_to_eat = data->time_to_eat;
 	philo->data->time_to_sleep = data->time_to_sleep;
 	philo->data->limit_meals_nbr = data->limit_meals_nbr;
+	philo->data->threads_running = 0;
 	philo->data->start_simulation = 0;
 	philo->data->last_meal_time = 0;
-	philo->data->threads_running = 0;
 }
 
 bool	init_mutex(t_table *table, t_data *data)
@@ -72,7 +72,9 @@ void    parse_input(t_data *data, char **argv)
     data->time_to_die = comprove_argv(argv[2]);
     data->time_to_eat = comprove_argv(argv[3]);
     data->time_to_sleep = comprove_argv(argv[4]);
+    data->threads_running = 0;
     data->start_simulation = 0;
+    data->last_meal_time = 0;
     if (argv[5])
         data->limit_meals_nbr = comprove_argv(argv[5]);
     else

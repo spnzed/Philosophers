@@ -6,13 +6,13 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 16:56:28 by aaespino          #+#    #+#             */
-/*   Updated: 2023/12/14 19:07:09 by aaespino         ###   ########.fr       */
+/*   Updated: 2023/12/19 17:56:19 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-static void	clean_dishes(t_table *table)
+void	clean_dishes(t_table *table)
 {
 	t_philo	*philo;
 	t_fork	*fork;
@@ -56,8 +56,9 @@ int	main (int argc , char **argv)
 			clean_dishes(&table);
 			return(ft_error("Dinner interrupted.\n"));
 		}
+		return (0);
 	}
 	else
 		return (ft_error("Input isn't the correct one.\n" 
-			GREEN"Example: ./philosphers 5 800 800 500\n"RESET));
+			GREEN"Example: ./philo 5 800 800 500\n"RESET));
 }

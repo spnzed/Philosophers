@@ -47,37 +47,14 @@ typedef enum e_mutex_code
     DESTROY,
 }	t_mutex_code;
 
-typedef struct s_philo	t_philo;
-
-typedef struct s_data
-{
-	long		philo_nbr;
-	long		time_to_die;
-	long		time_to_eat;
-	long		time_to_sleep;
-	long		limit_meals_nbr;
-	long		start_simulation;
-	long		last_meal_time;
-	long		threads_running;
-}	t_data;
+typedef struct s_table	t_table;
+typedef struct s_data	t_data;
 
 typedef struct s_fork
 {
 	t_mutex	fork;
 	int		fork_id;
 }	t_fork;
-
-typedef struct s_table
-{
-	bool		threads_ready;
-	bool		end_simu;
-	t_fork		*forks;
-	t_philo		*philos;
-	t_thread	monitor;
-	t_mutex		table_mutex;
-	t_mutex		write_mutex;
-	t_data		*table_data;
-}	t_table;
 
 typedef struct s_philo
 {
@@ -95,9 +72,35 @@ typedef struct s_philo
 	bool		dead;
 }	t_philo;
 
+typedef struct s_table
+{
+	t_fork		*forks;
+	t_philo		*philos;
+	t_thread	monitor;
+	t_data		*table_data;
+	t_mutex		table_mutex;
+	t_mutex		write_mutex;
+	long		philo_nbr;
+	bool		end;
+}	t_table;
+
+typedef struct s_data
+{
+	long		philo_nbr;
+	long		time_to_die;
+	long		time_to_eat;
+	long		time_to_sleep;
+	long		limit_meals_nbr;
+	long		threads_running;
+	long		start_simulation;
+	long		last_meal_time;
+}	t_data;
+
+
 //***************    PROTOTYPES     ***************
 
 //***	main	***
+void		clean_dishes(t_table *table);
 
 //process the input
 void    	parse_input(t_data *data, char **argv);
@@ -127,6 +130,8 @@ void 	print_action(t_philo *philo, char *str);
 bool	dead(t_philo *philo);
 bool 	eat(t_philo *philo);
 void 	philo_does(t_philo_code code, t_philo *philo);
+
+bool	simulation_finished(t_table *table);
 
 //***	utils	***
 int			ft_atoi(const char *str);

@@ -2,8 +2,8 @@
 #                                     CONFIG                                   #
 ################################################################################
 
-NAME        := philo
-CC        := gcc
+NAME     := philo
+CC       := gcc
 FLAGS    := -Wall -Wextra -Werror -Iinclude -fsanitize=thread -g
 ################################################################################
 #                                 PROGRAM'S SRCS                               #
@@ -49,7 +49,7 @@ BLUE		:= \033[1;34m
 CYAN 		:= \033[1;36m
 RM		    := rm -f
 
-${NAME}:	${OBJS}
+${NAME}:	${OBJS} Makefile include/philosophers.h
 			@echo "$(GREEN)Compilation ${CLR_RMV}of ${YELLOW}$(NAME) ${CLR_RMV}..."
 			${CC} ${FLAGS} -o ${NAME} ${OBJS} ${INCLUDES}
 			@echo "$(GREEN)$(NAME) created ✔️"

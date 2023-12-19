@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 15:30:46 by aaespino          #+#    #+#             */
-/*   Updated: 2023/12/14 15:50:37 by aaespino         ###   ########.fr       */
+/*   Updated: 2023/12/19 19:45:07 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ static void	prepare_philos(t_philo *philo, t_fork *forks, int i, long nbr)
 {
 	philo->meals_count = 0;
 	philo->full = false;
-	philo->dead = false;
 	philo->philo_position = i;
 	philo->philo_id = i + 1;
 	philo->philo_mutex = &philo->table->table_mutex;
@@ -45,20 +44,20 @@ bool	prepare_table(t_table *table, t_data *data)
 
 	i = 0;
 	nbr = data->philo_nbr;
-	table->table_data->philo_nbr = data->philo_nbr;
+	table->philo_nbr = data->philo_nbr;
 	if (!(init_malloc(table, data)))
 		return (NULL);
 	if (!(init_mutex(table, data)))
 		return (NULL);
 	while (i < nbr)
 	{
+		table->forks[i].fork_id = i;
+		table->philos[i].table = table;
 		table->philos[i].data = malloc(sizeof(t_data));
 		if (!table->philos[i].data)
 			return (NULL);
-		assign_table_data(&table->philos[i], data);
-		table->forks[i].fork_id = i;
-		table->philos[i].table = table;
 		prepare_philos(&table->philos[i], table->forks, i, nbr);
+		assign_table_data(&table->philos[i], data);
 		i++;
 	}
 	return (true);
