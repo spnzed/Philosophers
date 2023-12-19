@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 16:56:28 by aaespino          #+#    #+#             */
-/*   Updated: 2023/12/19 17:56:19 by aaespino         ###   ########.fr       */
+/*   Updated: 2023/12/19 20:41:22 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ int	main (int argc , char **argv)
 			clean_dishes(&table);
 			return(ft_error("Dinner interrupted.\n"));
 		}
-		return (0);
 	}
 	else
 		return (ft_error("Input isn't the correct one.\n" 

@@ -130,7 +130,6 @@ void 	print_action(t_philo *philo, char *str);
 bool	dead(t_philo *philo);
 bool 	eat(t_philo *philo);
 void 	philo_does(t_philo_code code, t_philo *philo);
-
 bool	simulation_finished(t_table *table);
 
 //***	utils	***

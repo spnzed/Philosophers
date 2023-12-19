@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 15:28:24 by aaespino          #+#    #+#             */
-/*   Updated: 2023/12/19 20:02:39 by aaespino         ###   ########.fr       */
+/*   Updated: 2023/12/19 21:04:51 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,18 @@ static bool philo_died(t_philo *philo)
 {
 	long 	time;
 	long	time_to_die;
+	long	last_meal;
 
 	if (safe_get_bool(philo->philo_mutex, &philo->full))
 		return (NULL);
 	time = ft_get_time();
-	time -= safe_get_long(philo->philo_mutex, philo->data->last_meal_time);
+	last_meal = safe_get_long(&philo->table->table_mutex, philo->data->last_meal_time);
+	if (last_meal > 0)
+		time -= last_meal;
+	else 
+		return (NULL);
 	time_to_die = safe_get_long(philo->philo_mutex, philo->data->time_to_die);
-	if (time > time_to_die)
+	if (time >= time_to_die)
 	{
 		dead(philo);
 		return (true);

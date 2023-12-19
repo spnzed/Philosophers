@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 16:58:18 by aaespino          #+#    #+#             */
-/*   Updated: 2023/12/19 20:03:51 by aaespino         ###   ########.fr       */
+/*   Updated: 2023/12/19 20:41:49 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void handle_threads(t_table *table, t_data *data)
         ft_safe_thread(&table->philos[i].thread_id, NULL, NULL, JOIN);
 }
 
-static bool	call_philosophers(t_table *table, t_data *data)
+bool	start_dinning(t_table *table, t_data *data)
 {
 	long i;
 
@@ -49,24 +49,7 @@ static bool	call_philosophers(t_table *table, t_data *data)
         return (NULL);
     data->start_simulation = ft_get_time();
     handle_threads (table, data);
+    safe_put_bool(&table->table_mutex, &table->end, true);
     ft_safe_thread(&table->monitor, NULL, NULL, JOIN);
     return(true);
-}
-
-bool    start_dinning (t_table *table, t_data *data)
-{
-    //bool done;
-
-    if (!(call_philosophers(table, data)))
-        return (NULL);
-	//printf(MAGENTA"HASTA AQUI\n"RESET);
-    //done = safe_get_bool(&table->table_mutex, &table->end_simu);
-    // if (done)
-    // {
-    //     clean_dishes (table);
-    //     return (true);
-    // }
-    // else
-    //     return (NULL);
-    return (true);
 }
