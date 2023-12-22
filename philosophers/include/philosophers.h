@@ -125,6 +125,8 @@ void		safe_put_bool (t_mutex *mutex, bool *dest, bool val);
 bool		safe_get_bool(t_mutex *mutex, bool *val);
 long		safe_get_long(t_mutex *mutex, long value);
 
+bool		philo_is_full(t_philo *philo);
+
 //actions
 void 	print_action(t_philo *philo, char *str);
 bool	dead(t_philo *philo);

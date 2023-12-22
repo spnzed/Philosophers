@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 15:28:24 by aaespino          #+#    #+#             */
-/*   Updated: 2023/12/19 21:04:51 by aaespino         ###   ########.fr       */
+/*   Updated: 2023/12/20 17:50:45 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,11 @@ static bool philo_died(t_philo *philo)
 	return (NULL);
 }
 
+bool philo_is_full(t_philo *philo)
+{
+	return (safe_get_bool(philo->philo_mutex, &philo->full));
+}
+
 void	*monitor(void *data)
 {
 	t_table *table;;
@@ -87,6 +92,7 @@ void	*monitor(void *data)
 		{
 			if (philo_died(&table->philos[i]))
 				safe_put_bool(&table->table_mutex, &table->end, true);
+			i++;
 		}
 	}
 	return (NULL);
