@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 15:28:24 by aaespino          #+#    #+#             */
-/*   Updated: 2023/12/20 17:50:45 by aaespino         ###   ########.fr       */
+/*   Updated: 2023/12/22 19:09:20 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ void	*one_philo(void *pointer)
 	philo->data->start_simulation = ft_get_time();
 	philo_does(THINK, philo);
 	print_action(philo, YELLOW"has taken a fork \t [🍴]");
-	safe_put_bool(philo->philo_mutex, &philo->full, true);
 	dead(philo);
 	return (NULL);
 }
@@ -28,6 +27,11 @@ void	*one_philo(void *pointer)
 bool	simulation_finished(t_table *table)
 {
 	return (safe_get_bool(&table->table_mutex, &table->end));
+}
+
+bool philo_is_full(t_philo *philo)
+{
+	return (safe_get_bool(philo->philo_mutex, &philo->full));
 }
 
 static bool all_threads(t_mutex	*mutex, long *threads, long philo_nbr)
@@ -63,11 +67,6 @@ static bool philo_died(t_philo *philo)
 		return (true);
 	}
 	return (NULL);
-}
-
-bool philo_is_full(t_philo *philo)
-{
-	return (safe_get_bool(philo->philo_mutex, &philo->full));
 }
 
 void	*monitor(void *data)
