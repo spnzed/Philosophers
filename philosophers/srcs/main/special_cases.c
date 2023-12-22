@@ -6,33 +6,11 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 15:28:24 by aaespino          #+#    #+#             */
-/*   Updated: 2023/12/22 19:09:20 by aaespino         ###   ########.fr       */
+/*   Updated: 2023/12/22 19:32:37 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
-
-void	*one_philo(void *pointer)
-{
-	t_philo	*philo;
-
-	philo = (t_philo *)pointer;
-	philo->data->start_simulation = ft_get_time();
-	philo_does(THINK, philo);
-	print_action(philo, YELLOW"has taken a fork \t [🍴]");
-	dead(philo);
-	return (NULL);
-}
-
-bool	simulation_finished(t_table *table)
-{
-	return (safe_get_bool(&table->table_mutex, &table->end));
-}
-
-bool philo_is_full(t_philo *philo)
-{
-	return (safe_get_bool(philo->philo_mutex, &philo->full));
-}
 
 static bool all_threads(t_mutex	*mutex, long *threads, long philo_nbr)
 {
@@ -66,6 +44,18 @@ static bool philo_died(t_philo *philo)
 		dead(philo);
 		return (true);
 	}
+	return (NULL);
+}
+
+void	*one_philo(void *pointer)
+{
+	t_philo	*philo;
+
+	philo = (t_philo *)pointer;
+	philo->data->start_simulation = ft_get_time();
+	philo_does(THINK, philo);
+	print_action(philo, YELLOW"has taken a fork \t [🍴]");
+	dead(philo);
 	return (NULL);
 }
 

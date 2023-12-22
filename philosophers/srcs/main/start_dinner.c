@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 16:58:18 by aaespino          #+#    #+#             */
-/*   Updated: 2023/12/19 20:41:49 by aaespino         ###   ########.fr       */
+/*   Updated: 2023/12/22 19:40:42 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,16 @@ static void handle_threads(t_table *table, t_data *data)
     i = -1;
     while (++i < data->philo_nbr)
         ft_safe_thread(&table->philos[i].thread_id, NULL, NULL, JOIN);
+}
+
+bool	simulation_finished(t_table *table)
+{
+	return (safe_get_bool(&table->table_mutex, &table->end));
+}
+
+bool philo_is_full(t_philo *philo)
+{
+	return (safe_get_bool(philo->philo_mutex, &philo->full));
 }
 
 bool	start_dinning(t_table *table, t_data *data)

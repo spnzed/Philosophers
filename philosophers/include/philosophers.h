@@ -99,45 +99,46 @@ typedef struct s_data
 
 //***************    PROTOTYPES     ***************
 
-//***	main	***
-void		clean_dishes(t_table *table);
-
-//process the input
-void    	parse_input(t_data *data, char **argv);
-void		assign_table_data(t_philo *philo, t_data *data);
-bool		init_malloc(t_table *table, t_data *data);
-bool		init_mutex(t_table *table, t_data *data);
-
-//init table and philos data
-bool		prepare_table(t_table *table, t_data *data);
-//🥩
-bool		start_dinning(t_table *table, t_data *data);
-//routines
-void		*one_philo(void *pointer);
+	//dinner_routine.c		routine
 void		*dinner_routine(void *data);
-void		*monitor(void *data);
+
+	//parsing.c				process the input
+void		assign_table_data(t_philo *philo, t_data *data);
+bool		init_mutex(t_table *table, t_data *data);
+bool		init_malloc(t_table *table, t_data *data);
+void    	parse_input(t_data *data, char **argv);
+
+	//philo_does.c
+void 		print_action(t_philo *philo, char *str);
+bool		dead(t_philo *philo);
+bool 		eat(t_philo *philo);
 void 		philo_does(t_philo_code code, t_philo *philo);
-void	    safe_bool (t_mutex *mutex, bool *dest, bool val);
-//safe_data
+
+	//prepare.c
+bool		prepare_table(t_table *table, t_data *data);
+
+	//safe_data.c
 void		safe_increase_long(t_mutex *mutex, long *count);
 void		safe_put_long(t_mutex *mutex, long *dest, long value);
+long		safe_get_long(t_mutex *mutex, long value);
 void		safe_put_bool (t_mutex *mutex, bool *dest, bool val);
 bool		safe_get_bool(t_mutex *mutex, bool *val);
-long		safe_get_long(t_mutex *mutex, long value);
 
-bool		philo_is_full(t_philo *philo);
+	//special_cases.c
+void		*one_philo(void *pointer);
+void		*monitor(void *data);
 
-//actions
-void 	print_action(t_philo *philo, char *str);
-bool	dead(t_philo *philo);
-bool 	eat(t_philo *philo);
-void 	philo_does(t_philo_code code, t_philo *philo);
-bool	simulation_finished(t_table *table);
+
+	//start_dinning.c
+bool		simulation_finished(t_table *table);
+bool 		philo_is_full(t_philo *philo);
+bool		start_dinning(t_table *table, t_data *data);
+
+
 
 //***	utils	***
 int			ft_atoi(const char *str);
 long		ft_atol(const char *str);
-void		ft_clear_data(t_table *table);
 bool		ft_error(char *str);
 bool		ft_found(char c, char *str);
 u_int64_t	ft_get_time(void);

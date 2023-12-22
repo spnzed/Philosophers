@@ -6,11 +6,24 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 22:08:22 by aaronespino       #+#    #+#             */
-/*   Updated: 2023/12/19 19:50:59 by aaespino         ###   ########.fr       */
+/*   Updated: 2023/12/22 19:27:16 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
+
+//  5       Number of philos
+//  800     Time the table will die if doesnt eat
+//  200     Time table takes to eat
+//  200     Time table takes to sleep
+//  7       Number of times tables eat
+
+static int comprove_argv(char *arg)
+{
+    if (ft_atol(arg) > INT_MAX)
+        return (ft_error ("INT MAX is the limit sweetie"));
+    return (ft_atoi(arg));
+}
 
 void	assign_table_data(t_philo *philo, t_data *data)
 {
@@ -51,19 +64,6 @@ bool	init_malloc(t_table *table, t_data *data)
 	if (!table->forks)
 		return (NULL);
 	return (true);
-}
-
-//  5       Number of philos
-//  800     Time the table will die if doesnt eat
-//  200     Time table takes to eat
-//  200     Time table takes to sleep
-//  7       Number of times tables eat
-
-static int comprove_argv(char *arg)
-{
-    if (ft_atol(arg) > INT_MAX)
-        return (ft_error ("INT MAX is the limit sweetie"));
-    return (ft_atoi(arg));
 }
 
 void    parse_input(t_data *data, char **argv)
