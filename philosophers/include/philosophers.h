@@ -48,7 +48,6 @@ typedef enum e_mutex_code
 }	t_mutex_code;
 
 typedef struct s_table	t_table;
-typedef struct s_data	t_data;
 
 typedef struct s_fork
 {
@@ -61,40 +60,33 @@ typedef struct s_philo
 	int			philo_id;
 	int			philo_position;
 	long		meals_count;
+	long		last_meal_time;
 	t_thread	thread_id;
-	t_mutex		*philo_mutex;
-	t_mutex		*write_mutex;
+	t_mutex		mutex;
 	t_fork		*left;
 	t_fork		*right;
 	t_table		*table;
-	t_data		*data;
 	bool		full;
 	bool		dead;
 }	t_philo;
 
 typedef struct s_table
 {
-	t_fork		*forks;
-	t_philo		*philos;
-	t_thread	monitor;
-	t_data		*table_data;
-	t_mutex		table_mutex;
-	t_mutex		write_mutex;
-	long		philo_nbr;
-	bool		end;
-}	t_table;
-
-typedef struct s_data
-{
 	long		philo_nbr;
 	long		time_to_die;
 	long		time_to_eat;
 	long		time_to_sleep;
 	long		limit_meals_nbr;
-	long		threads_running;
 	long		start_simulation;
-	long		last_meal_time;
-}	t_data;
+	long		threads_running;
+	t_thread	monitor;
+	t_fork		*forks;
+	t_philo		*philos;
+	t_mutex		table_mutex;
+	t_mutex		write_mutex;
+	bool		end;
+	bool		ready;
+}	t_table;
 
 
 //***************    PROTOTYPES     ***************
@@ -103,19 +95,20 @@ typedef struct s_data
 void		*dinner_routine(void *data);
 
 	//parsing.c				process the input
-void		assign_table_data(t_philo *philo, t_data *data);
-bool		init_mutex(t_table *table, t_data *data);
-bool		init_malloc(t_table *table, t_data *data);
-void    	parse_input(t_data *data, char **argv);
+bool		init_mutex(t_table *table);
+bool		init_malloc(t_table *table);
+void    	parse_input(t_table *table, char **argv);
 
 	//philo_does.c
 void 		print_action(t_philo *philo, char *str);
+bool 		do_eat(t_philo *philo);
+bool		do_sleep(t_philo *philo);
+bool		do_think(t_philo *philo);
 bool		dead(t_philo *philo);
-bool 		eat(t_philo *philo);
 void 		philo_does(t_philo_code code, t_philo *philo);
 
 	//prepare.c
-bool		prepare_table(t_table *table, t_data *data);
+bool		prepare_table(t_table *table);
 
 	//safe_data.c
 void		safe_increase_long(t_mutex *mutex, long *count);
@@ -132,7 +125,7 @@ void		*monitor(void *data);
 	//start_dinning.c
 bool		simulation_finished(t_table *table);
 bool 		philo_is_full(t_philo *philo);
-bool		start_dinning(t_table *table, t_data *data);
+bool		start_dinning(t_table *table);
 
 
 

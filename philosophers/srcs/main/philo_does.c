@@ -6,149 +6,72 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 14:46:55 by aaespino          #+#    #+#             */
-/*   Updated: 2023/12/22 19:13:04 by aaespino         ###   ########.fr       */
+/*   Updated: 2024/01/05 17:42:38 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-void print_action(t_philo *philo, char *str)
-{
-	uint64_t	time;
-	uint64_t	minus;
-	uint64_t	time_to_die;
-
-	ft_safe_mutex(philo->write_mutex, LOCK);
-	time = ft_get_time();
-	minus = safe_get_long(philo->philo_mutex, philo->data->start_simulation);
-	time_to_die = safe_get_long(philo->philo_mutex, philo->data->time_to_die);
-	time -= minus;
- 	printf(BLUE"[%06llu ms] \t" WHITE" %d %s\n"RESET, time, philo->philo_id, str);
-	ft_safe_mutex (philo->write_mutex, UNLOCK);
-}
-
-bool	dead(t_philo *philo)
-{
-	bool	dead;
-
-	dead = safe_get_bool(philo->philo_mutex, &philo->dead);
-	safe_put_bool(philo->philo_mutex, &philo->dead, true);
-	philo_does (DIE, philo);
-	return (NULL);
-}
-
-bool eat(t_philo *philo)
+bool	do_eat(t_philo *philo)
 {
 	ft_safe_mutex(&philo->left->fork, LOCK);
-	print_action(philo, YELLOW"has taken a fork \t [🍴]");
+	philo_does(FORK, philo);
 	ft_safe_mutex(&philo->right->fork, LOCK);
-	print_action(philo, YELLOW"has taken a fork \t [🍴]");
-	safe_put_long(&philo->table->table_mutex, &philo->data->last_meal_time, ft_get_time());
-	safe_increase_long(philo->philo_mutex, &philo->meals_count);
+	philo_does(FORK, philo);
+	safe_put_long(&philo->mutex, &philo->last_meal_time, ft_get_time());
+	philo->meals_count++;
 	philo_does(EAT, philo);
-	if (philo->data->limit_meals_nbr 
-		&& philo->meals_count >= philo->data->limit_meals_nbr)
-		safe_put_bool(philo->philo_mutex, &philo->full, true);
+	ft_usleep(philo->table->time_to_die);
+	if (philo->table->limit_meals_nbr > 0
+		&& philo->meals_count == philo->table->limit_meals_nbr)
+		safe_put_bool(&philo->mutex, &philo->full, true);
 	ft_safe_mutex(&philo->left->fork, UNLOCK);
 	ft_safe_mutex(&philo->right->fork, UNLOCK);
 	return (0);
 }
 
-void philo_does(t_philo_code code, t_philo *philo)
+bool	do_sleep(t_philo *philo)
 {
-	// if (safe_get_bool(philo->philo_mutex, &philo->full))
-	// 	return ;
-	if (EAT == code)
-	{
-		print_action(philo, GREEN"is eating\t\t [😋]"RESET);
-		ft_usleep(philo->data->time_to_eat);
-	}
-	if (SLEEP == code)
-		{
-		print_action(philo, CYAN"is sleeping\t\t [😴]"RESET);
-		ft_usleep(philo->data->time_to_sleep);
-	}
-	if (THINK == code)
-	{
-		print_action(philo, WHITE"is thinking\t\t [🤔]"RESET);
-			if (philo->table->philo_nbr % 2 == 0)
-			return ;
-		ft_usleep(((philo->data->time_to_eat * 2) - philo->data->time_to_sleep));
-	}
-	if (DIE == code)
-		print_action(philo, RED"has died \t\t [💀]");
+	philo_does (SLEEP, philo);
+	ft_usleep(philo->table->time_to_sleep);
+	return (NULL);
 }
 
-// void print_action(t_philo *philo, char *str)
-// {
-// 	uint64_t	time;
-// 	uint64_t	minus;
-// 	uint64_t	time_to_die;
+bool	do_think(t_philo *philo)
+{
+	long	t_eat;
+	long	t_sleep;
+	long	t_think;
 
-// 	ft_safe_mutex(philo->write_mutex, LOCK);
-// 	time = ft_get_time();
-// 	minus = safe_get_long(philo->philo_mutex, philo->data->start_simulation);
-// 	time_to_die = safe_get_long(philo->philo_mutex, philo->data->time_to_die);
-// 	time -= minus;
-// // 	printf(BLUE"[%06llu ms] \t" WHITE" %d %s\n"RESET, time, philo->philo_id, str);
-//  	printf("%012llu %d %s\n", time, philo->philo_id, str);
-// 	ft_safe_mutex (philo->write_mutex, UNLOCK);
-// }
+	philo_does(THINK, philo);
+	if (philo->table->philo_nbr % 2 == 0)
+		return (NULL);
+	t_eat = philo->table->time_to_eat;
+	t_sleep = philo->table->time_to_sleep;
+	t_think = (t_eat * 2) - t_sleep;
+	if (t_think < 0)
+		t_think = 0;
+	ft_usleep(t_think);
+	return (0);
+}
 
-// bool	dead(t_philo *philo)
-// {
-// 	bool	dead;
+void philo_does(t_philo_code code, t_philo *philo)
+{
+	long		time;
 
-// 	dead = safe_get_bool(philo->philo_mutex, &philo->dead);
-// 	safe_put_bool(philo->philo_mutex, &philo->dead, true);
-// 	philo_does (DIE, philo);
-// 	return (NULL);
-// }
-
-// bool eat(t_philo *philo)
-// {
-// 	ft_safe_mutex(&philo->left->fork, LOCK);
-// 	print_action(philo, "has taken a fork");
-// //	print_action(philo, YELLOW"has taken a fork \t [🍴]");
-// 	ft_safe_mutex(&philo->right->fork, LOCK);
-// 	print_action(philo, "has taken a fork");
-// //	print_action(philo, YELLOW"has taken a fork \t [🍴]");
-// 	safe_put_long(&philo->table->table_mutex, &philo->data->last_meal_time, ft_get_time());
-// 	safe_increase_long(philo->philo_mutex, &philo->meals_count);
-// 	philo_does(EAT, philo);
-// 	if (philo->data->limit_meals_nbr 
-// 		&& philo->meals_count >= philo->data->limit_meals_nbr)
-// 		safe_put_bool(philo->philo_mutex, &philo->full, true);
-// 	ft_safe_mutex(&philo->left->fork, UNLOCK);
-// 	ft_safe_mutex(&philo->right->fork, UNLOCK);
-// 	return (0);
-// }
-
-// void philo_does(t_philo_code code, t_philo *philo)
-// {
-// 	// if (safe_get_bool(philo->philo_mutex, &philo->full))
-// 	// 	return ;
-// 	if (EAT == code)
-// 	{
-// 		print_action(philo, "is eating"RESET);
-// //		print_action(philo, GREEN"is eating\t\t [😋]"RESET);
-// 		ft_usleep(philo->data->time_to_eat);
-// 	}
-// 	if (SLEEP == code)
-// 		{
-// 		print_action(philo, "is sleeping"RESET);
-// //		print_action(philo, CYAN"is sleeping\t\t [😴]"RESET);
-// 		ft_usleep(philo->data->time_to_sleep);
-// 	}
-// 	if (THINK == code)
-// 	{
-// 		print_action(philo, "is thinking"RESET);
-// //		print_action(philo, WHITE"is thinking\t\t [🤔]"RESET);
-// 			if (philo->table->philo_nbr % 2 == 0)
-// 			return ;
-// 		ft_usleep(((philo->data->time_to_eat * 2) - philo->data->time_to_sleep));
-// 	}
-// 	if (DIE == code)
-// 		print_action(philo, "has died");
-// //		print_action(philo, RED"has died \t\t [💀]");
-// }
+	time = ft_get_time() - philo->table->start_simulation;
+	if (safe_get_bool(&philo->mutex, &philo->full))
+		return ;
+	ft_safe_mutex(&philo->table->write_mutex, LOCK);
+	if (FORK == code && !simulation_finished(philo->table))
+ 		printf(BLUE"[%06ld ms] \t" WHITE" %d %s\n"RESET, time, philo->philo_id, YELLOW"has taken a fork \t [🍴]");
+	else if (EAT == code && !simulation_finished(philo->table))
+ 		printf(BLUE"[%06ld ms] \t" WHITE" %d %s\n"RESET, time, philo->philo_id, GREEN"is eating\t\t [😋]");
+	else if (SLEEP == code && !simulation_finished(philo->table))
+ 		printf(BLUE"[%06ld ms] \t" WHITE" %d %s\n"RESET, time, philo->philo_id, CYAN"is sleeping\t\t [😴]");
+	else if (THINK == code && !simulation_finished(philo->table))
+ 		printf(BLUE"[%06ld ms] \t" WHITE" %d %s\n"RESET, time, philo->philo_id, WHITE"is thinking\t\t [🤔]");
+	else if (DIE == code && !simulation_finished(philo->table))
+ 		printf(BLUE"[%06ld ms] \t" WHITE" %d %s\n"RESET, time, philo->philo_id, RED"has died \t\t [💀]");
+	ft_safe_mutex (&philo->table->write_mutex, UNLOCK);
+}

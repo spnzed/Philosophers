@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 15:28:24 by aaespino          #+#    #+#             */
-/*   Updated: 2023/12/22 19:32:37 by aaespino         ###   ########.fr       */
+/*   Updated: 2024/01/05 17:36:46 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,21 +28,38 @@ static bool philo_died(t_philo *philo)
 {
 	long 	time;
 	long	time_to_die;
-	long	last_meal;
 
-	if (safe_get_bool(philo->philo_mutex, &philo->full))
+	if (safe_get_bool(&philo->mutex, &philo->full))
 		return (NULL);
-	time = ft_get_time();
-	last_meal = safe_get_long(&philo->table->table_mutex, philo->data->last_meal_time);
-	if (last_meal > 0)
-		time -= last_meal;
-	else 
-		return (NULL);
-	time_to_die = safe_get_long(philo->philo_mutex, philo->data->time_to_die);
-	if (time >= time_to_die)
-	{
-		dead(philo);
+	time = ft_get_time() - safe_get_long(&philo->mutex, philo->last_meal_time);
+	time_to_die = philo->table->time_to_die;
+	if (time > time_to_die)
 		return (true);
+	return (NULL);
+}
+
+void	*monitor(void *data)
+{
+	t_table *table;
+	int		i;
+
+	table = (t_table *)data;
+	i = 0;
+	while (!all_threads(&table->table_mutex,
+			&table->threads_running, table->philo_nbr))
+		;
+	while (!simulation_finished(table))
+	{
+		i = 0;
+		while (i < table->philo_nbr && !simulation_finished(table))
+		{
+			if (philo_died(&table->philos[i]))
+			{
+				safe_put_bool(&table->table_mutex, &table->end, true);
+				philo_does(DIE, &table->philos[i]);
+			}
+			i++;
+		}
 	}
 	return (NULL);
 }
@@ -52,37 +69,8 @@ void	*one_philo(void *pointer)
 	t_philo	*philo;
 
 	philo = (t_philo *)pointer;
-	philo->data->start_simulation = ft_get_time();
-	philo_does(THINK, philo);
-	print_action(philo, YELLOW"has taken a fork \t [🍴]");
-	dead(philo);
-	return (NULL);
-}
-
-void	*monitor(void *data)
-{
-	t_table *table;;
-	long 	time_to_die;
-	long 	nbr;
-	long	threads;
-	int		i;
-
-	table = (t_table *)data;
-	time_to_die = safe_get_long(table->philos->philo_mutex, table->philos->data->time_to_die);
-	nbr = safe_get_long(table->philos->philo_mutex, table->philos->data->philo_nbr);
-	threads = safe_get_long(table->philos->philo_mutex, table->philos->data->threads_running);
-	i = 0;
-	while (!all_threads(&table->table_mutex, &threads, nbr))
-		;
-	while (!simulation_finished(table))
-	{
-		i = 0;
-		while (i < nbr && !simulation_finished(table))
-		{
-			if (philo_died(&table->philos[i]))
-				safe_put_bool(&table->table_mutex, &table->end, true);
-			i++;
-		}
-	}
+	philo->table->start_simulation = ft_get_time();
+	do_think(philo);
+	philo_does(DIE, philo);
 	return (NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 18:50:12 by aaespino          #+#    #+#             */
-/*   Updated: 2023/12/22 19:08:04 by aaespino         ###   ########.fr       */
+/*   Updated: 2024/01/05 18:00:05 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,15 @@
 static void assign_turns(t_philo *philo)
 {
 	if (philo->philo_id % 2 == 0)
-			ft_usleep(50);
+		ft_usleep(50);
 	else if (philo->philo_id % 2)
-		philo_does(THINK, philo);
+		do_think(philo);
+}
+
+static void wait_threads(t_table *table)
+{
+	while (!safe_get_bool(&table->table_mutex, &table->ready))
+		;
 }
 
 void	*dinner_routine(void *data)
@@ -25,14 +31,17 @@ void	*dinner_routine(void *data)
 	t_philo *philo;
 
 	philo = (t_philo *)data;
-	safe_put_long(philo->philo_mutex, &philo->data->start_simulation, ft_get_time());
-	safe_increase_long(philo->philo_mutex, &philo->data->threads_running);
+	wait_threads(philo->table);
+	safe_put_long(&philo->mutex, &philo->last_meal_time, ft_get_time());
+	safe_increase_long(&philo->table->table_mutex, &philo->table->threads_running);
 	assign_turns (philo);
-	while (simulation_finished(philo->table) == false && philo_is_full(philo) == false)
+	while (!simulation_finished(philo->table))
 	{
-		eat(philo);
-		philo_does(SLEEP, philo);
-		philo_does(THINK, philo);
+		if (safe_get_bool(&philo->mutex, &philo->full))
+			break ;
+		do_eat(philo);
+		do_sleep(philo);
+		do_think(philo);
 	}
 	return (NULL);
 }
