@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 15:30:46 by aaespino          #+#    #+#             */
-/*   Updated: 2024/01/09 17:38:51 by aaespino         ###   ########.fr       */
+/*   Updated: 2024/01/09 19:06:30 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ static int	init_philos(t_table *table)
 		table->philos[i].time_to_die = table->time_to_die;
 		table->philos[i].limit_meals_nbr = table->limit_meals_nbr;
 		table->philos[i].meals_count = 0;
+		table->philos[i].eating = false;
 		table->philos[i].supervisor = malloc(sizeof(t_thread));
 		if (!table->philos[i].supervisor)
 			return (ft_error("Error while allocating philos"));
@@ -68,9 +69,6 @@ static int	init_mutex(t_table *table)
 
 static int	init_malloc(t_table *table)
 {
-	table->table_ids = malloc(table->philo_nbr * sizeof(t_thread));
-	if (!table->table_ids)
-		return (ft_error("Error while allocating threads IDs"));
 	table->forks = malloc(table->philo_nbr * sizeof(t_fork));
 	if (!table->forks)
 		return (ft_error("Error while allocating forks"));

@@ -69,27 +69,27 @@ typedef struct s_philo
 	long		last_meal_time;
 	long		time_to_die;
 	long		limit_meals_nbr;
+	bool		eating;
 	bool		full;
-	bool		end;
+	bool		dead;
 }	t_philo;
 
 typedef struct s_table
 {
-	t_thread	monitor;
 	t_philo		*philos;
-	t_thread	*table_ids;
 	t_fork		*forks;
-	t_mutex		table_mutex;
-	t_mutex		write_mutex;
-	int			end;
+	t_thread	monitor;
+	t_mutex		mutex;
+	t_mutex		write;
 	int			dead;
-	int			philo_nbr;
 	int			full_philos;
+	int			philo_nbr;
 	long		limit_meals_nbr;
 	long		time_to_die;
 	long		time_to_eat;
 	long		time_to_sleep;
 	long		start_simulation;
+	bool		end;
 }	t_table;
 
 

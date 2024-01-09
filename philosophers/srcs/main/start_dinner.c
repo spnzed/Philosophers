@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 16:58:18 by aaespino          #+#    #+#             */
-/*   Updated: 2024/01/09 17:32:18 by aaespino         ###   ########.fr       */
+/*   Updated: 2024/01/09 18:42:57 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static void handle_threads(t_table *table)
 
 bool	 simulation_finished(t_table *table)
 {
-	return (safe_get_bool(&table->table_mutex, &table->end));
+	return (safe_get_bool(&table->mutex, &table->end));
 }
 
 bool philo_is_full(t_philo *philo)
@@ -53,13 +53,13 @@ int start_dinning(t_table *table)
     {
         while (i < table->philo_nbr)
         {
-            if (!(ft_safe_thread(&table->table_ids[i], &dinner_routine, 
+            if (!(ft_safe_thread(&table->philos[i].thread_id, &dinner_routine, 
                 &table->philos[i], CREATE)))
                 return (ft_error("Error while creating threads\n"));
             i++;
             ft_usleep(1);
         }
     }
-    handle_threads (table);
+    handle_threads(table);
     return (0);
 }

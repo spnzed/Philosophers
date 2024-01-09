@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 16:56:28 by aaespino          #+#    #+#             */
-/*   Updated: 2024/01/09 17:25:52 by aaespino         ###   ########.fr       */
+/*   Updated: 2024/01/09 18:36:05 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ void	clean_dishes(t_table *table)
 			ft_safe_mutex(&philo->right->fork, DESTROY);
 		i++;
 	}
-	ft_safe_mutex(&table->write_mutex, DESTROY);
-	ft_safe_mutex(&table->table_mutex, DESTROY);
+	ft_safe_mutex(&table->write, DESTROY);
+	ft_safe_mutex(&table->mutex, DESTROY);
 	free(table->forks);
 	free(table->philos);
 }
