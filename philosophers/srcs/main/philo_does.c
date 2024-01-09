@@ -6,13 +6,13 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 14:46:55 by aaespino          #+#    #+#             */
-/*   Updated: 2024/01/05 17:42:38 by aaespino         ###   ########.fr       */
+/*   Updated: 2024/01/09 17:30:38 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-bool	do_eat(t_philo *philo)
+void	do_eat(t_philo *philo)
 {
 	ft_safe_mutex(&philo->left->fork, LOCK);
 	philo_does(FORK, philo);
@@ -27,17 +27,15 @@ bool	do_eat(t_philo *philo)
 		safe_put_bool(&philo->mutex, &philo->full, true);
 	ft_safe_mutex(&philo->left->fork, UNLOCK);
 	ft_safe_mutex(&philo->right->fork, UNLOCK);
-	return (0);
 }
 
-bool	do_sleep(t_philo *philo)
+void	do_sleep(t_philo *philo)
 {
 	philo_does (SLEEP, philo);
 	ft_usleep(philo->table->time_to_sleep);
-	return (NULL);
 }
 
-bool	do_think(t_philo *philo)
+void	do_think(t_philo *philo)
 {
 	long	t_eat;
 	long	t_sleep;
@@ -45,14 +43,13 @@ bool	do_think(t_philo *philo)
 
 	philo_does(THINK, philo);
 	if (philo->table->philo_nbr % 2 == 0)
-		return (NULL);
+		return ;
 	t_eat = philo->table->time_to_eat;
 	t_sleep = philo->table->time_to_sleep;
 	t_think = (t_eat * 2) - t_sleep;
 	if (t_think < 0)
 		t_think = 0;
-	ft_usleep(t_think);
-	return (0);
+	ft_usleep(t_think * 0.42);
 }
 
 void philo_does(t_philo_code code, t_philo *philo)

@@ -57,58 +57,62 @@ typedef struct s_fork
 
 typedef struct s_philo
 {
-	int			philo_id;
-	int			philo_position;
-	long		meals_count;
-	long		last_meal_time;
+	t_table		*table;
+	t_thread	supervisor;
 	t_thread	thread_id;
-	t_mutex		mutex;
 	t_fork		*left;
 	t_fork		*right;
-	t_table		*table;
+	t_mutex		mutex;
+	int			meals_count;
+	int			philo_id;
+	int			philo_position;
+	long		last_meal_time;
+	long		time_to_die;
+	long		limit_meals_nbr;
 	bool		full;
-	bool		dead;
+	bool		end;
 }	t_philo;
 
 typedef struct s_table
 {
-	long		philo_nbr;
+	t_thread	monitor;
+	t_philo		*philos;
+	t_thread	*table_ids;
+	t_fork		*forks;
+	t_mutex		table_mutex;
+	t_mutex		write_mutex;
+	int			end;
+	int			dead;
+	int			philo_nbr;
+	int			full_philos;
+	long		limit_meals_nbr;
 	long		time_to_die;
 	long		time_to_eat;
 	long		time_to_sleep;
-	long		limit_meals_nbr;
 	long		start_simulation;
-	long		threads_running;
-	t_thread	monitor;
-	t_fork		*forks;
-	t_philo		*philos;
-	t_mutex		table_mutex;
-	t_mutex		write_mutex;
-	bool		end;
-	bool		ready;
 }	t_table;
 
 
 //***************    PROTOTYPES     ***************
 
 	//dinner_routine.c		routine
+void		*one_philo(void *pointer);
+void		*monitor(void *data);
 void		*dinner_routine(void *data);
 
 	//parsing.c				process the input
-bool		init_mutex(t_table *table);
-bool		init_malloc(t_table *table);
-void    	parse_input(t_table *table, char **argv);
+int			parse_input(t_table *table, char **argv);
 
 	//philo_does.c
 void 		print_action(t_philo *philo, char *str);
-bool 		do_eat(t_philo *philo);
-bool		do_sleep(t_philo *philo);
-bool		do_think(t_philo *philo);
+void 		do_eat(t_philo *philo);
+void		do_sleep(t_philo *philo);
+void		do_think(t_philo *philo);
 bool		dead(t_philo *philo);
 void 		philo_does(t_philo_code code, t_philo *philo);
 
 	//prepare.c
-bool		prepare_table(t_table *table);
+int			prepare_table(t_table *table);
 
 	//safe_data.c
 void		safe_increase_long(t_mutex *mutex, long *count);
@@ -117,24 +121,19 @@ long		safe_get_long(t_mutex *mutex, long value);
 void		safe_put_bool (t_mutex *mutex, bool *dest, bool val);
 bool		safe_get_bool(t_mutex *mutex, bool *val);
 
-	//special_cases.c
-void		*one_philo(void *pointer);
-void		*monitor(void *data);
-
-
 	//start_dinning.c
 bool		simulation_finished(t_table *table);
 bool 		philo_is_full(t_philo *philo);
-bool		start_dinning(t_table *table);
+int			start_dinning(t_table *table);
 
 
 
 //***	utils	***
 int			ft_atoi(const char *str);
 long		ft_atol(const char *str);
-bool		ft_error(char *str);
+int			ft_error(char *str);
 bool		ft_found(char c, char *str);
-u_int64_t	ft_get_time(void);
+long		ft_get_time(void);
 int			ft_input_checker(char **argv);
 bool		ft_safe_mutex(t_mutex *mutex, t_mutex_code code);
 bool		ft_safe_thread(t_thread *thread, void *(*function)(void *), void *data, t_pthread_code code);

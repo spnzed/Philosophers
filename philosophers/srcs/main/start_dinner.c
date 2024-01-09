@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 16:58:18 by aaespino          #+#    #+#             */
-/*   Updated: 2024/01/05 17:06:31 by aaespino         ###   ########.fr       */
+/*   Updated: 2024/01/09 17:32:18 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void handle_threads(t_table *table)
         ft_safe_thread(&table->philos[i].thread_id, NULL, NULL, JOIN);
 }
 
-bool	simulation_finished(t_table *table)
+bool	 simulation_finished(t_table *table)
 {
 	return (safe_get_bool(&table->table_mutex, &table->end));
 }
@@ -31,36 +31,35 @@ bool philo_is_full(t_philo *philo)
 	return (safe_get_bool(&philo->mutex, &philo->full));
 }
 
-bool	start_dinning(t_table *table)
+int start_dinning(t_table *table)
 {
 	long i;
 
     i = 0;
-    if (!table->limit_meals_nbr)
-        return (NULL);
-    else if (table->philo_nbr == 1)
+	table->start_simulation = ft_get_time();
+    if (table->limit_meals_nbr > 0)
+    {
+        if (!(ft_safe_thread(&table->monitor, monitor, 
+                table, CREATE)))
+            return (ft_error("Error while creating threads\n"));
+    }
+    if (table->philo_nbr == 1)
     {
         if (!(ft_safe_thread(&table->philos[0].thread_id, one_philo, 
-                &table->philos[0], CREATE)))
-            return (NULL);
+            &table->philos[0], CREATE)))
+            return (1);
     }
     else
     {
         while (i < table->philo_nbr)
         {
-            if (!(ft_safe_thread(&table->philos[i].thread_id, dinner_routine, 
+            if (!(ft_safe_thread(&table->table_ids[i], &dinner_routine, 
                 &table->philos[i], CREATE)))
-                return (NULL);
+                return (ft_error("Error while creating threads\n"));
             i++;
+            ft_usleep(1);
         }
     }
-    if (!(ft_safe_thread(&table->monitor, monitor, 
-               table, CREATE)))
-        return (NULL);
-	table->start_simulation = ft_get_time();
-    safe_put_bool(&table->table_mutex, &table->ready, true);
     handle_threads (table);
-    safe_put_bool(&table->table_mutex, &table->end, true);
-    ft_safe_thread(&table->monitor, NULL, NULL, JOIN);
-    return(true);
+    return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 22:08:22 by aaronespino       #+#    #+#             */
-/*   Updated: 2024/01/04 18:06:40 by aaespino         ###   ########.fr       */
+/*   Updated: 2024/01/09 15:25:44 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,25 @@ static int comprove_argv(char *arg)
     return (ft_atoi(arg));
 }
 
-void    parse_input(t_table *table, char **argv)
+int parse_input(t_table *table, char **argv)
 {
     table->philo_nbr = comprove_argv(argv[1]);
     table->time_to_die = comprove_argv(argv[2]);
     table->time_to_eat = comprove_argv(argv[3]);
     table->time_to_sleep = comprove_argv(argv[4]);
-    table->threads_running = 0;
-    table->start_simulation = 0;
     if (argv[5])
         table->limit_meals_nbr = comprove_argv(argv[5]);
     else
         table->limit_meals_nbr = -1;
+    if (table->philo_nbr <= 0 || table->philo_nbr > 200 || table->time_to_die < 0
+		|| table->time_to_eat < 0 || table->time_to_sleep < 0)
+		return (ft_error("Invalid input values\n"));
+    table->end = NULL;
+    table->ready = NULL;
+    table->start_simulation = 0;
+    if (!(ft_safe_mutex(&table->table_mutex, INIT)))
+    	return (1);	
+	if (!(ft_safe_mutex(&table->write_mutex, INIT)))
+    	return (1);
+    return (0);
 }

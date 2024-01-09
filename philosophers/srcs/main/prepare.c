@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 15:30:46 by aaespino          #+#    #+#             */
-/*   Updated: 2024/01/04 18:32:06 by aaespino         ###   ########.fr       */
+/*   Updated: 2024/01/09 17:38:51 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,66 +26,67 @@ static void assign_forks(t_philo *philo, t_fork *forks, long philo_nbr)
 	}
 }
 
-static bool	prepare_philos(t_philo *philo, t_fork *forks, int i, long nbr)
-{
-	philo->meals_count = 0;
-	philo->full = false;
-	philo->philo_position = i;
-	philo->philo_id = i + 1;
-	if (!(ft_safe_mutex(&philo->mutex, INIT)))
-    	return (NULL);	
-	assign_forks(philo, forks, nbr);
-	return (true);
-}
-
-bool	init_mutex(t_table *table)
+static int	init_philos(t_table *table)
 {
 	int i;
 
 	i = 0;
-	if (!(ft_safe_mutex(&table->table_mutex, INIT)))
-    	return (NULL);	
-	if (!(ft_safe_mutex(&table->write_mutex, INIT)))
-    	return (NULL);
 	while (i < table->philo_nbr)
 	{
-		if (!(ft_safe_mutex(&table->forks[i].fork, INIT)))
-        	return (NULL);
+		table->philos[i].table = table;
+		table->philos[i].philo_position = i;
+		table->philos[i].philo_id = i + 1;
+		table->philos[i].time_to_die = table->time_to_die;
+		table->philos[i].limit_meals_nbr = table->limit_meals_nbr;
+		table->philos[i].meals_count = 0;
+		table->philos[i].supervisor = malloc(sizeof(t_thread));
+		if (!table->philos[i].supervisor)
+			return (ft_error("Error while allocating philos"));
+		table->forks[i].fork_id = i;
+		if (!(ft_safe_mutex(&table->philos[i].mutex, INIT)))
+    		return (1);
+		assign_forks(&table->philos[i], table->forks, table->philo_nbr);
 		i++;
 	}
-	return (true);
+	return (0);
 }
 
-bool	init_malloc(t_table *table)
-{
-	table->philos = malloc(table->philo_nbr * sizeof(t_philo));
-	if (!table->philos)
-		return (NULL);
-	table->forks = malloc(table->philo_nbr * sizeof(t_fork));
-	if (!table->forks)
-		return (NULL);
-	return (true);
-}
-
-
-bool	prepare_table(t_table *table)
+static int	init_mutex(t_table *table)
 {
 	int i;
-	long nbr;
 
-	i = 0;
-	nbr = table->philo_nbr;
-	if (!(init_malloc(table)))
-		return (NULL);
-	if (!(init_mutex(table)))
-		return (NULL);
-	while (i < nbr)
+	i = -1;
+	while (i++ < table->philo_nbr)
 	{
-		table->forks[i].fork_id = i;
-		table->philos[i].table = table;
-		if (!prepare_philos(&table->philos[i], table->forks, i, nbr))
-			return (NULL);
-		i++;
+		if (!(ft_safe_mutex(&table->forks[i].fork, INIT)))
+        	return (ft_error("Error while creating forks"));
+		if (!(ft_safe_mutex(&table->philos[i].mutex, INIT)))
+        	return (ft_error("Error while creating forks"));
 	}
-	return (true);
+	return (0);
+}
+
+static int	init_malloc(t_table *table)
+{
+	table->table_ids = malloc(table->philo_nbr * sizeof(t_thread));
+	if (!table->table_ids)
+		return (ft_error("Error while allocating threads IDs"));
+	table->forks = malloc(table->philo_nbr * sizeof(t_fork));
+	if (!table->forks)
+		return (ft_error("Error while allocating forks"));
+	table->philos = malloc(table->philo_nbr * sizeof(t_philo));
+	if (!table->philos)
+		return (ft_error("Error while allocating philos"));
+	return (0);
+}
+
+int	prepare_table(t_table *table)
+{
+	if (init_malloc(table))
+		return (1);
+	if (init_mutex(table))
+		return (1);
+	if (init_philos(table))
+		return (1);
+	return (0);
 }

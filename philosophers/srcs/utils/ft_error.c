@@ -6,14 +6,14 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 18:47:33 by aaespino          #+#    #+#             */
-/*   Updated: 2023/11/23 16:59:02 by aaespino         ###   ########.fr       */
+/*   Updated: 2024/01/09 15:02:18 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-bool	ft_error(char *str)
+int	ft_error(char *str)
 {
 	printf ("%s%s%s\n", RED, str, RESET);
-    return (NULL);
+    return (1);
 }

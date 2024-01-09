@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 16:56:28 by aaespino          #+#    #+#             */
-/*   Updated: 2024/01/05 16:29:24 by aaespino         ###   ########.fr       */
+/*   Updated: 2024/01/09 17:25:52 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,13 +60,14 @@ int	main (int argc , char **argv)
 
 	if (argc == 5 || argc == 6)
 	{
-		parse_input(&table, argv);
-		if (!(prepare_table(&table)))
+		if (parse_input(&table, argv))
+			return (0);
+		if (prepare_table(&table))
 		{
 			clean_dishes(&table);
 			return(ft_error("Table can't be prepared.\n"));
 		}
-		else if (!(start_dinning(&table)))
+		if (start_dinning(&table))
 		{
 			clean_dishes(&table);
 			return(ft_error("Dinner interrupted.\n"));

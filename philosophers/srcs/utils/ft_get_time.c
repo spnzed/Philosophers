@@ -6,15 +6,15 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 16:57:56 by aaespino          #+#    #+#             */
-/*   Updated: 2023/12/13 16:36:35 by aaespino         ###   ########.fr       */
+/*   Updated: 2024/01/09 16:48:15 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-u_int64_t	ft_get_time(void)
+long	ft_get_time(void)
 {
-	u_int64_t		now;
+	long		now;
 	struct timeval	va;
 
 	gettimeofday(&va, NULL);
