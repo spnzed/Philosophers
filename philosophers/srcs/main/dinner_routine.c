@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 18:50:12 by aaespino          #+#    #+#             */
-/*   Updated: 2024/01/09 19:11:14 by aaespino         ###   ########.fr       */
+/*   Updated: 2024/01/09 19:22:37 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	*monitor(void *data)
 	t_philo *philo;
 
 	philo = (t_philo *) data;
+	printf("KELOKEEE\n");
 	philo_does(DIE, philo);
 	while (!philo->table->end)
 	{
@@ -44,10 +45,10 @@ void	*supervisor(void *data)
 	t_philo	*philo;
 
 	philo = (t_philo *)data;
-	while (philo->table->dead == 0)
+	while (!(philo->table->dead))
 	{
 		ft_safe_mutex(&philo->mutex, LOCK);
-		if (ft_get_time() >= philo->time_to_die && philo->meals_count == 0)
+		if (ft_get_time() >= philo->time_to_die && !philo->eating)
 			philo_does(DIE, philo);
 		if (philo->meals_count == philo->limit_meals_nbr)
 		{

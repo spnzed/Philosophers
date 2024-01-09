@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 14:46:55 by aaespino          #+#    #+#             */
-/*   Updated: 2024/01/09 19:08:45 by aaespino         ###   ########.fr       */
+/*   Updated: 2024/01/09 19:18:08 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,17 +69,23 @@ void philo_does(t_philo_code code, t_philo *philo)
 {
 	long		time;
 
-	time = ft_get_time() - philo->table->start_simulation;
 	ft_safe_mutex(&philo->table->write, LOCK);
-	if (FORK == code)
- 		printf(BLUE"[%06ld ms] \t" WHITE" %d %s\n"RESET, time, philo->philo_id, YELLOW"has taken a fork \t [🍴]");
-	if (EAT == code)
- 		printf(BLUE"[%06ld ms] \t" WHITE" %d %s\n"RESET, time, philo->philo_id, GREEN"is eating\t\t [😋]");
-	if (SLEEP == code)
- 		printf(BLUE"[%06ld ms] \t" WHITE" %d %s\n"RESET, time, philo->philo_id, CYAN"is sleeping\t\t [😴]");
-	if (THINK == code)
- 		printf(BLUE"[%06ld ms] \t" WHITE" %d %s\n"RESET, time, philo->philo_id, WHITE"is thinking\t\t [🤔]");
-	if (DIE == code)
+	time = ft_get_time() - philo->table->start_simulation;
+	if ((DIE == code) && philo->table->end == false)
+	{
  		printf(BLUE"[%06ld ms] \t" WHITE" %d %s\n"RESET, time, philo->philo_id, RED"has died \t\t [💀]");
+		philo->table->end = true;
+	}
+	else
+	{
+		if (FORK == code)
+			printf(BLUE"[%06ld ms] \t" WHITE" %d %s\n"RESET, time, philo->philo_id, YELLOW"has taken a fork \t [🍴]");
+		if (EAT == code)
+			printf(BLUE"[%06ld ms] \t" WHITE" %d %s\n"RESET, time, philo->philo_id, GREEN"is eating\t\t [😋]");
+		if (SLEEP == code)
+			printf(BLUE"[%06ld ms] \t" WHITE" %d %s\n"RESET, time, philo->philo_id, CYAN"is sleeping\t\t [😴]");
+		if (THINK == code)
+			printf(BLUE"[%06ld ms] \t" WHITE" %d %s\n"RESET, time, philo->philo_id, WHITE"is thinking\t\t [🤔]");		
+	}
 	ft_safe_mutex (&philo->table->write, UNLOCK);
 }
