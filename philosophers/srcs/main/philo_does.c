@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 14:46:55 by aaespino          #+#    #+#             */
-/*   Updated: 2024/01/09 19:18:08 by aaespino         ###   ########.fr       */
+/*   Updated: 2024/01/10 17:52:31 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	do_eat(t_philo *philo)
 	philo->time_to_die = ft_get_time() + philo->table->time_to_die;
 	philo_does(EAT, philo);
 	philo->meals_count++;
-	ft_usleep(philo->table->time_to_die / 100);
+	ft_usleep(philo->table->time_to_eat);
 	philo->eating = false;
 	ft_safe_mutex(&philo->mutex, UNLOCK);
 	drop_forks(philo);
@@ -76,7 +76,7 @@ void philo_does(t_philo_code code, t_philo *philo)
  		printf(BLUE"[%06ld ms] \t" WHITE" %d %s\n"RESET, time, philo->philo_id, RED"has died \t\t [💀]");
 		philo->table->end = true;
 	}
-	else
+	if (philo->table->end == false)
 	{
 		if (FORK == code)
 			printf(BLUE"[%06ld ms] \t" WHITE" %d %s\n"RESET, time, philo->philo_id, YELLOW"has taken a fork \t [🍴]");

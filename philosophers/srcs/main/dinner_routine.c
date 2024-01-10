@@ -6,36 +6,23 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 18:50:12 by aaespino          #+#    #+#             */
-/*   Updated: 2024/01/09 19:22:37 by aaespino         ###   ########.fr       */
+/*   Updated: 2024/01/10 19:20:03 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
-
-void	*one_philo(void *pointer)
-{
-	t_philo	*philo;
-
-	philo = (t_philo *)pointer;
-	philo->table->start_simulation = ft_get_time();
-	do_think(philo);
-	philo_does(DIE, philo);
-	return ((void *) 0);
-}
 
 void	*monitor(void *data)
 {
 	t_philo *philo;
 
 	philo = (t_philo *) data;
-	printf("KELOKEEE\n");
-	philo_does(DIE, philo);
-	while (!philo->table->end)
+	while (!(philo->table->end))
 	{
-		ft_safe_mutex(&philo->mutex, LOCK);
+		pthread_mutex_lock(&philo->mutex);
 		if (philo->table->full_philos >= philo->table->philo_nbr)
-			philo->table->end = 1;
-		ft_safe_mutex(&philo->mutex, UNLOCK);
+			philo->table->end = true;
+		pthread_mutex_unlock(&philo->mutex);
 	}
 	return (NULL);
 }
@@ -45,12 +32,12 @@ void	*supervisor(void *data)
 	t_philo	*philo;
 
 	philo = (t_philo *)data;
-	while (!(philo->table->dead))
+	while (philo->table->end == false)
 	{
 		ft_safe_mutex(&philo->mutex, LOCK);
-		if (ft_get_time() >= philo->time_to_die && !philo->eating)
+		if (ft_get_time() >= philo->time_to_die && philo->eating == 0)
 			philo_does(DIE, philo);
-		if (philo->meals_count == philo->limit_meals_nbr)
+		if (philo->meals_count == philo->table->limit_meals_nbr)
 		{
 			ft_safe_mutex(&philo->table->mutex, LOCK);
 			philo->table->full_philos++;
@@ -68,14 +55,51 @@ void	*dinner_routine(void *data)
 
 	philo = (t_philo *)data;
 	philo->time_to_die = philo->time_to_die + ft_get_time();
-	if (!(ft_safe_thread(&philo->supervisor, &supervisor, &philo->supervisor, CREATE)))
+	if (!(ft_safe_thread(&philo->supervisor, &supervisor, (void *)philo, CREATE)))
 		return ((void *)1);
-	while (!(philo->table->dead))
+	while (philo->table->end == false)
 	{
-		do_eat(philo);
 		philo_does (THINK, philo);
+		do_eat(philo);
 	}
-	if (!(ft_safe_thread(&philo->supervisor, &supervisor, &philo->supervisor, JOIN)))
+	if (!(ft_safe_thread(&philo->supervisor, &supervisor, NULL, JOIN)))
 		return ((void *)1);
 	return ((void *)0);
+}
+
+int	one_philo(t_table *table)
+{
+	table->start_simulation = ft_get_time();
+	if (!(ft_safe_thread(&table->philos[0].thread_id, dinner_routine, &table->philos[0], CREATE)))
+		return (ft_error("Error while creating thread"));
+	ft_safe_thread(&table->philos[0].thread_id, NULL, NULL, JOIN);
+	while (!table->end)
+		ft_usleep(0);
+	clean_dishes(table);
+	return (0);
+}
+
+int start_dinning(t_table *table)
+{
+	int 		i;
+	pthread_t	t_monitor;
+
+    i = 0;
+	table->start_simulation = ft_get_time();
+    if (table->limit_meals_nbr > 0)
+    {
+        if (!(ft_safe_thread(&t_monitor, &monitor, &table->philos[0], CREATE)))
+            return (ft_error("Error while creating monitor\n"));
+    }
+    while (i < table->philo_nbr)
+    {
+        if (!(ft_safe_thread(&table->threads[i], &dinner_routine, &table->philos[i], CREATE)))
+            return (ft_error("Error while creating threads\n"));
+        i++;
+        ft_usleep(1);
+	}
+    i = -1;
+    while (++i < table->philo_nbr)
+        ft_safe_thread(&table->threads[i], NULL, NULL, JOIN);
+    return (0);
 }

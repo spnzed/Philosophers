@@ -15,7 +15,6 @@ SRCS        :=            srcs/philosophers.c \
                           srcs/main/philo_does.c \
                           srcs/main/prepare.c \
                           srcs/main/safe_data.c \
-                          srcs/main/start_dinner.c \
                           srcs/utils/ft_atoi.c \
                           srcs/utils/ft_atol.c \
                           srcs/utils/ft_error.c \

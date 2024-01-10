@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 16:56:28 by aaespino          #+#    #+#             */
-/*   Updated: 2024/01/09 18:36:05 by aaespino         ###   ########.fr       */
+/*   Updated: 2024/01/10 18:00:39 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,20 @@
 
 /*
 ***One Philo***
-
 ./philo 1 800 200 200
 
 ***No philo dies***
-
 ./philo 5 800 200 200
-./philo 5 800 200 200 7
 ./philo 4 410 200 200
+*/
 
+/*
+TODO
 ***Philo dies***
-
 ./philo 4 310 200 100
+
+***No Philo dies***
+./philo 5 800 200 200 7
 */
 
 void	clean_dishes(t_table *table)
@@ -67,6 +69,8 @@ int	main (int argc , char **argv)
 			clean_dishes(&table);
 			return(ft_error("Table can't be prepared.\n"));
 		}
+		if (table.philo_nbr == 1)
+			return (one_philo(&table));
 		if (start_dinning(&table))
 		{
 			clean_dishes(&table);

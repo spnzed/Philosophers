@@ -77,12 +77,13 @@ typedef struct s_philo
 typedef struct s_table
 {
 	t_philo		*philos;
+	t_philo		*monitor;
+	t_thread	*threads;
 	t_fork		*forks;
-	t_thread	monitor;
 	t_mutex		mutex;
 	t_mutex		write;
-	int			dead;
 	int			full_philos;
+	int			dead_philos;
 	int			philo_nbr;
 	long		limit_meals_nbr;
 	long		time_to_die;
@@ -95,8 +96,9 @@ typedef struct s_table
 
 //***************    PROTOTYPES     ***************
 
+void		clean_dishes(t_table *table);
 	//dinner_routine.c		routine
-void		*one_philo(void *pointer);
+int			one_philo(t_table *table);
 void		*monitor(void *data);
 void		*dinner_routine(void *data);
 

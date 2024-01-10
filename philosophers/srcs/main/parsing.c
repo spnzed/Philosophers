@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 22:08:22 by aaronespino       #+#    #+#             */
-/*   Updated: 2024/01/09 18:57:53 by aaespino         ###   ########.fr       */
+/*   Updated: 2024/01/10 17:05:29 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ int parse_input(t_table *table, char **argv)
 		|| table->time_to_eat < 0 || table->time_to_sleep < 0)
 		return (ft_error("Invalid input values\n"));
     table->end = false;
-    table->dead = false;
     table->start_simulation = 0;
     if (!(ft_safe_mutex(&table->mutex, INIT)))
     	return (1);	
