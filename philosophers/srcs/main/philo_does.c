@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 14:46:55 by aaespino          #+#    #+#             */
-/*   Updated: 2024/01/10 17:52:31 by aaespino         ###   ########.fr       */
+/*   Updated: 2024/01/11 19:44:13 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,12 +71,12 @@ void philo_does(t_philo_code code, t_philo *philo)
 
 	ft_safe_mutex(&philo->table->write, LOCK);
 	time = ft_get_time() - philo->table->start_simulation;
-	if ((DIE == code) && philo->table->end == false)
+	if ((DIE == code) && !(safe_get_bool(&philo->table->mutex, &philo->table->end)))
 	{
  		printf(BLUE"[%06ld ms] \t" WHITE" %d %s\n"RESET, time, philo->philo_id, RED"has died \t\t [💀]");
-		philo->table->end = true;
+		safe_put_bool(&philo->table->mutex, &philo->table->end, true);
 	}
-	if (philo->table->end == false)
+	if (!safe_get_bool(&philo->table->mutex, &philo->table->end))
 	{
 		if (FORK == code)
 			printf(BLUE"[%06ld ms] \t" WHITE" %d %s\n"RESET, time, philo->philo_id, YELLOW"has taken a fork \t [🍴]");
