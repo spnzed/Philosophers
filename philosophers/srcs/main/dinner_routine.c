@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 18:50:12 by aaespino          #+#    #+#             */
-/*   Updated: 2024/01/11 19:41:28 by aaespino         ###   ########.fr       */
+/*   Updated: 2024/01/12 16:34:06 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,22 +62,50 @@ void	*dinner_routine(void *data)
 		philo_does (THINK, philo);
 		do_eat(philo);
 	}
-	if (!(ft_safe_thread(&philo->supervisor, &supervisor, NULL, JOIN)))
+	if (!(ft_safe_thread(&philo->supervisor, NULL, NULL, JOIN)))
 		return ((void *)1);
 	return ((void *)0);
 }
 
-int	one_philo(t_table *table)
+//printf("GET_TIME: %lu\n TIME_TO_DIE:%lu\n", ft_get_time(), philo->time_to_die);
+
+
+void	*lone_philo(void *data)
 {
-	table->start_simulation = ft_get_time();
-	if (!(ft_safe_thread(&table->philos[0].thread_id, &dinner_routine, &table->philos[0], CREATE)))
-		return (ft_error("Error while creating thread"));
-	ft_safe_thread(&table->philos[0].thread_id, NULL, NULL, JOIN);
-	while (!table->end)
+	t_philo	*philo;
+
+	philo = (t_philo *)data;
+	philo->table->start_simulation = ft_get_time();
+	philo_does(THINK, philo);
+	philo_does(FORK, philo);
+	philo->time_to_die = philo->time_to_die + ft_get_time();
+	while (!(safe_get_bool(&philo->table->mutex, &philo->table->end)))
 		ft_usleep(0);
-	clean_dishes(table);
 	return (0);
 }
+
+int one_philo(t_table *table)
+{
+	ft_safe_thread(&table->philos[0].thread_id, &lone_philo, &table->philos[0], CREATE);
+	if (!(ft_safe_thread(&table->philos[0].supervisor, &supervisor, &table->philos[0], CREATE)))
+		return (1);
+	ft_safe_thread(&table->philos[0].thread_id, NULL, NULL, JOIN);
+	safe_put_bool(&table->mutex, &table->end, true);
+	ft_safe_thread(&table->philos[0].supervisor, NULL, NULL, JOIN);
+	return (0);
+}
+
+// int	one_philo(t_table *table)
+// {
+// 	table->start_simulation = ft_get_time();
+// 	if (!(ft_safe_thread(&table->philos[0].thread_id, &dinner_routine, &table->philos[0], CREATE)))
+// 		return (ft_error("Error while creating thread"));
+// 	ft_safe_thread(&table->philos[0].thread_id, NULL, NULL, JOIN);
+// 	while (!safe_get_bool(&table->mutex, &table->end))
+// 		ft_usleep(0);
+// 	clean_dishes(table);
+// 	return (0);
+// }
 
 int start_dinning(t_table *table)
 {

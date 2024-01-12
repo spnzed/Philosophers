@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 16:56:28 by aaespino          #+#    #+#             */
-/*   Updated: 2024/01/11 19:32:58 by aaespino         ###   ########.fr       */
+/*   Updated: 2024/01/12 16:39:44 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,35 +22,35 @@
 
 /*
 ***One Philo***
-./philo 1 800 200 200		EL FORK SE QUEDA PILLADO
+./philo 1 800 200 200		✅
 ***No Philo dies***
-./philo 5 800 200 200 7		EL PRIMER PHILO COME UNA VEZ MAS
+./philo 5 800 200 200 7		✅????
 */
+
+static void	clean_table(t_table	*table)
+{
+	if (table->threads)
+		free(table->threads);
+	if (table->forks)
+		free(table->forks);
+	if (table->philos)
+		free(table->philos);
+}
 
 void	clean_dishes(t_table *table)
 {
-	t_philo	*philo;
-	t_fork	*fork;
 	int		i;
 
 	i = 0;
-	table = NULL;
 	while (i < table->philo_nbr)
 	{
-		philo = &table->philos[i];
-		ft_safe_mutex(&philo->mutex, DESTROY);
-		fork = philo->left;
-		if (fork)
-			ft_safe_mutex(&philo->left->fork, DESTROY);
-		fork = philo->right;
-		if (fork)
-			ft_safe_mutex(&philo->right->fork, DESTROY);
+		ft_safe_mutex(&table->forks[i].fork, DESTROY);
+		ft_safe_mutex(&table->philos[i].mutex, DESTROY);
 		i++;
 	}
 	ft_safe_mutex(&table->write, DESTROY);
 	ft_safe_mutex(&table->mutex, DESTROY);
-	free(table->forks);
-	free(table->philos);
+	clean_table(table);
 }
 
 int	main (int argc , char **argv)
