@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 18:13:57 by aaespino          #+#    #+#             */
-/*   Updated: 2024/01/10 17:22:11 by aaespino         ###   ########.fr       */
+/*   Updated: 2024/01/15 17:16:57 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@ static bool	handle_error(int status, t_mutex_code code)
 			return (ft_error ("The value specified by attr is invalid."));
 	}
 	else if (EPERM == status)
-		return (ft_error ("The current thread does not hold a lock on mutex."));
+		return (ft_error ("The thread does not hold a lock on mutex."));
 	else if (EDEADLK == status)
-		return (ft_error ("Deadlock possible if thread blocked waits for mutex."));
+		return (ft_error ("Deadlock if thread blocked waits for mutex."));
 	else if (ENOMEM == status)
 		return (ft_error ("Insufficient memory to create a new mutex."));
 	else if (EBUSY == status)
@@ -46,5 +46,5 @@ bool	ft_safe_mutex(t_mutex *mutex, t_mutex_code code)
 		return (handle_error(pthread_mutex_destroy(mutex), code));
 	else
 		return (ft_error("Wrong code for ft_safe_mutex: \n"
-			GREEN"use <LOCK> <UNLOCK> <INIT> <DESTROY>"RESET));
+				GREEN"use <LOCK> <UNLOCK> <INIT> <DESTROY>"RESET));
 }

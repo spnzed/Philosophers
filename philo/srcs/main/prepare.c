@@ -6,13 +6,13 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 15:30:46 by aaespino          #+#    #+#             */
-/*   Updated: 2024/01/10 19:06:13 by aaespino         ###   ########.fr       */
+/*   Updated: 2024/01/15 17:12:47 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-static void assign_forks(t_philo *philo, t_fork *forks, long philo_nbr)
+static void	assign_forks(t_philo *philo, t_fork *forks, long philo_nbr)
 {
 	if (philo->philo_position % 2 == 0)
 	{
@@ -28,7 +28,7 @@ static void assign_forks(t_philo *philo, t_fork *forks, long philo_nbr)
 
 static int	init_philos(t_table *table)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < table->philo_nbr)
@@ -42,7 +42,7 @@ static int	init_philos(t_table *table)
 		table->philos[i].eating = false;
 		table->forks[i].fork_id = i;
 		if (!(ft_safe_mutex(&table->philos[i].mutex, INIT)))
-    		return (1);
+			return (1);
 		assign_forks(&table->philos[i], table->forks, table->philo_nbr);
 		i++;
 	}
@@ -51,15 +51,15 @@ static int	init_philos(t_table *table)
 
 static int	init_mutex(t_table *table)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	while (i++ < table->philo_nbr)
 	{
 		if (!(ft_safe_mutex(&table->forks[i].fork, INIT)))
-        	return (ft_error("Error while creating forks"));
+			return (ft_error("Error while creating forks"));
 		if (!(ft_safe_mutex(&table->philos[i].mutex, INIT)))
-        	return (ft_error("Error while creating philos"));
+			return (ft_error("Error while creating philos"));
 	}
 	return (0);
 }

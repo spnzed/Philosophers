@@ -10,10 +10,11 @@ FLAGS    := -Wall -Wextra -Werror -Iinclude -fsanitize=thread -g
 ################################################################################
 
 SRCS        :=            srcs/philosophers.c \
-                          srcs/main/dinner_routine.c \
+                          srcs/main/actions.c \
                           srcs/main/parsing.c \
                           srcs/main/philo_does.c \
                           srcs/main/prepare.c \
+                          srcs/main/routines.c \
                           srcs/main/safe_data.c \
                           srcs/utils/ft_atoi.c \
                           srcs/utils/ft_atol.c \

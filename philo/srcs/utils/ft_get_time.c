@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 16:57:56 by aaespino          #+#    #+#             */
-/*   Updated: 2024/01/09 16:48:15 by aaespino         ###   ########.fr       */
+/*   Updated: 2024/01/15 17:15:35 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 long	ft_get_time(void)
 {
-	long		now;
+	long			now;
 	struct timeval	va;
 
 	gettimeofday(&va, NULL);
