@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 15:23:31 by aaespino          #+#    #+#             */
-/*   Updated: 2024/01/15 17:37:08 by aaespino         ###   ########.fr       */
+/*   Updated: 2024/01/15 17:50:10 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,10 +127,6 @@ void		safe_put_long(t_mutex *mutex, long *dest, long value);
 long		safe_get_long(t_mutex *mutex, long value);
 void		safe_put_bool(t_mutex *mutex, bool *dest, bool val);
 bool		safe_get_bool(t_mutex *mutex, bool *val);
-	//start_dinning.c
-bool		simulation_finished(t_table *table);
-bool		philo_is_full(t_philo *philo);
-int			start_dinning(t_table *table);
 //***	utils	***
 int			ft_atoi(const char *str);
 long		ft_atol(const char *str);
