@@ -25,12 +25,16 @@ SRCS        :=            srcs/philosophers.c \
                           srcs/utils/ft_safe_mutex.c \
                           srcs/utils/ft_safe_thread.c \
                           srcs/utils/ft_strcmp.c \
-                          srcs/utils/ft_usleep.c \
+                          srcs/utils/ft_usleep.c 
                           
 OBJS        := $(SRCS:.c=.o)
+DEPS        := $(SRCS:.c=.d)
 
 .c.o:
-	${CC} ${FLAGS} -c $< -o ${<:.c=.o}
+	${CC} ${FLAGS} -MMD -c $< -o $@
+
+# .c.d:
+# 	@${CC} ${FLAGS} -MM $< -MT ${@:.d=.o} > $@
 
 ################################################################################
 #                                  Makefile  objs                              #
@@ -56,13 +60,17 @@ bonus:		all
 
 clean:
 			@ ${RM} *.o */*.o */*/*.o
+			@ ${RM} *.d */*.d */*/*.d
 			@ echo "$(RED)Deleting $(CYAN)$(NAME) $(CLR_RMV)objs ✔️"
+			@ echo "$(RED)Deleting $(CYAN)$(NAME) $(CLR_RMV)deps ✔️"
 
 fclean:		clean
 			@ ${RM} ${NAME}
 			@ echo "$(RED)Deleting $(CYAN)$(NAME) $(CLR_RMV)binary ✔️"
 
 re:			fclean all
+
+-include ${DEPS}
 
 .PHONY:		all clean fclean re
 
