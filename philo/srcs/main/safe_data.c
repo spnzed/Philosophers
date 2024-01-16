@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 14:38:01 by aaespino          #+#    #+#             */
-/*   Updated: 2024/01/15 17:14:22 by aaespino         ###   ########.fr       */
+/*   Updated: 2024/01/16 18:02:50 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ long	safe_get_long(t_mutex *mutex, long val)
 
 void	safe_put_bool(t_mutex *mutex, bool *dest, bool val)
 {
+	// printf("val:::::%i|\n", val);
 	ft_safe_mutex (mutex, LOCK);
 	*dest = val;
 	ft_safe_mutex (mutex, UNLOCK);
@@ -45,10 +46,12 @@ void	safe_put_bool(t_mutex *mutex, bool *dest, bool val)
 
 bool	safe_get_bool(t_mutex *mutex, bool *val)
 {
-	bool	ret;
+	bool	ret = true;
 
+	// printf("fasfasf::%i|\n", ret);
 	ft_safe_mutex (mutex, LOCK);
 	ret = *val;
 	ft_safe_mutex (mutex, UNLOCK);
+	// printf("fasfasf::%i|\n", ret);
 	return (ret);
 }

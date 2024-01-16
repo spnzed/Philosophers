@@ -4,7 +4,7 @@
 
 NAME     := philo
 CC       := gcc
-FLAGS    := -Wall -Wextra -Werror -Iinclude -fsanitize=thread -g
+FLAGS    := -Wall -Wextra -Werror -Iinclude -g -fsanitize=thread
 ################################################################################
 #                                 PROGRAM'S SRCS                               #
 ################################################################################
@@ -32,9 +32,6 @@ DEPS        := $(SRCS:.c=.d)
 
 .c.o:
 	${CC} ${FLAGS} -MMD -c $< -o $@
-
-# .c.d:
-# 	@${CC} ${FLAGS} -MM $< -MT ${@:.d=.o} > $@
 
 ################################################################################
 #                                  Makefile  objs                              #

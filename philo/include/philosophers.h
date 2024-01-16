@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 15:23:31 by aaespino          #+#    #+#             */
-/*   Updated: 2024/01/15 17:50:10 by aaespino         ###   ########.fr       */
+/*   Updated: 2024/01/16 16:28:45 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ typedef struct s_fork
 typedef struct s_philo
 {
 	t_table		*table;
-	t_thread	supervisor;
 	t_thread	thread_id;
 	t_fork		*left;
 	t_fork		*right;
@@ -82,8 +81,6 @@ typedef struct s_philo
 	long		time_to_die;
 	long		limit_meals_nbr;
 	bool		eating;
-	bool		full;
-	bool		dead;
 }	t_philo;
 
 typedef struct s_table
@@ -94,9 +91,8 @@ typedef struct s_table
 	t_fork		*forks;
 	t_mutex		mutex;
 	t_mutex		write;
-	int			full_philos;
-	int			dead_philos;
 	int			philo_nbr;
+	long		full_philos;
 	long		limit_meals_nbr;
 	long		time_to_die;
 	long		time_to_eat;
@@ -113,6 +109,7 @@ void		do_think(t_philo *philo);
 	//parsing.c				
 int			parse_input(t_table *table, char **argv);
 	//philo_does.c
+void		print_act(long time, int id, char *string);
 void		philo_does(t_philo_code code, t_philo *philo);
 	//prepare.c
 int			prepare_table(t_table *table);

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   dinner_routine.c                                   :+:      :+:    :+:   */
+/*   routines.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 18:50:12 by aaespino          #+#    #+#             */
-/*   Updated: 2024/01/15 17:31:03 by aaespino         ###   ########.fr       */
+/*   Updated: 2024/01/16 18:37:47 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,25 @@
 
 void	*monitor(void *data)
 {
-	t_philo	*philo;
+	t_table	*table;
+	int		i;
 
-	philo = (t_philo *) data;
-	while (!(safe_get_bool(&philo->table->mutex, &philo->table->end)))
+	i = 0;
+	table = (t_table *)data;
+	ft_usleep(table->time_to_die - (table->time_to_die / 4));
+	while (i++ < table->philo_nbr && !(safe_get_bool(&table->mutex, &table->end))
+		&& safe_get_long(&table->mutex, table->full_philos) == 0)
 	{
-		pthread_mutex_lock(&philo->table->mutex);
-		if (philo->table->full_philos >= philo->table->philo_nbr)
-			philo->table->end = true;
-		pthread_mutex_unlock(&philo->table->mutex);
+		if (i == table->philo_nbr)
+			i = 0;
+		if (!(safe_get_bool(&table->philos[i].mutex, &table->philos[i].eating)))
+		{
+			ft_safe_mutex(&table->philos[i].mutex, LOCK);
+			if ((ft_get_time() >= table->philos[i].time_to_die)
+				&& table->philos[i].eating == false)
+				philo_does(DIE, &table->philos[i]);
+			ft_safe_mutex(&table->philos[i].mutex, UNLOCK);
+		}
 	}
 	return (NULL);
 }
@@ -37,13 +47,6 @@ void	*supervisor(void *data)
 		ft_safe_mutex(&philo->mutex, LOCK);
 		if (ft_get_time() >= philo->time_to_die && philo->eating == 0)
 			philo_does(DIE, philo);
-		if (philo->meals_count == philo->table->limit_meals_nbr)
-		{
-			ft_safe_mutex(&philo->table->mutex, LOCK);
-			philo->table->full_philos++;
-			philo->meals_count++;
-			ft_safe_mutex(&philo->table->mutex, UNLOCK);
-		}
 		ft_safe_mutex(&philo->mutex, UNLOCK);
 	}
 	return (0);
@@ -59,7 +62,10 @@ void	*lone_philo(void *data)
 	philo_does(FORK, philo);
 	philo->time_to_die = philo->time_to_die + ft_get_time();
 	while (!(safe_get_bool(&philo->table->mutex, &philo->table->end)))
-		ft_usleep(0);
+	{
+		if ((ft_get_time() >= philo->time_to_die))
+			philo_does(DIE, philo);
+	}
 	return (0);
 }
 
@@ -69,15 +75,21 @@ void	*dinner_routine(void *data)
 
 	philo = (t_philo *)data;
 	philo->time_to_die = philo->time_to_die + ft_get_time();
-	if (!(ft_safe_thread(&philo->supervisor, &supervisor,
-				(void *)philo, CREATE)))
-		return ((void *)1);
+	if (philo->philo_id % 2 != 0)
+		ft_usleep(philo->table->time_to_eat / 10);
 	while (!(safe_get_bool(&philo->table->mutex, &philo->table->end)))
 	{
-		philo_does (THINK, philo);
 		do_eat(philo);
+		philo_does (THINK, philo);
+		if (philo->meals_count == philo->table->limit_meals_nbr
+			&& philo->table->limit_meals_nbr != -1)
+			break ;
 	}
-	if (!(ft_safe_thread(&philo->supervisor, NULL, NULL, JOIN)))
-		return ((void *)1);
+	if (philo->meals_count == philo->table->limit_meals_nbr)
+	{
+		ft_safe_mutex(&philo->table->mutex, LOCK);
+		philo->table->full_philos++;
+		ft_safe_mutex(&philo->table->mutex, UNLOCK);
+	}
 	return ((void *)0);
 }

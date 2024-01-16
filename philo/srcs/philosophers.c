@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 16:56:28 by aaespino          #+#    #+#             */
-/*   Updated: 2024/01/15 17:31:14 by aaespino         ###   ########.fr       */
+/*   Updated: 2024/01/16 18:42:31 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,7 @@ int	one_philo(t_table *table)
 {
 	ft_safe_thread(&table->philos[0].thread_id, &lone_philo,
 		&table->philos[0], CREATE);
-	if (!(ft_safe_thread(&table->philos[0].supervisor, &supervisor,
-				&table->philos[0], CREATE)))
-		return (1);
 	ft_safe_thread(&table->philos[0].thread_id, NULL, NULL, JOIN);
-	safe_put_bool(&table->mutex, &table->end, true);
-	ft_safe_thread(&table->philos[0].supervisor, NULL, NULL, JOIN);
 	return (0);
 }
 
@@ -63,26 +58,21 @@ int	start_dinning(t_table *table)
 	int			i;
 	pthread_t	t_monitor;
 
-	i = 0;
+	i = -1;
+	while (++i < table->philo_nbr)
+		print_act(0, table->philos[i].philo_id, WHITE"is thinking\t\t [🤔]");
 	table->start_simulation = ft_get_time();
-	if (table->limit_meals_nbr > 0)
-	{
-		if (!(ft_safe_thread(&t_monitor, &monitor, &table->philos[0], CREATE)))
-			return (ft_error("Error while creating monitor\n"));
-	}
-	while (i < table->philo_nbr)
-	{
+	i = -1;
+	while (++i < table->philo_nbr)
 		if (!(ft_safe_thread(&table->threads[i], &dinner_routine,
 					&table->philos[i], CREATE)))
 			return (ft_error("Error while creating threads\n"));
-		i++;
-		ft_usleep(1);
-	}
+	if (!(ft_safe_thread(&t_monitor, &monitor, table, CREATE)))
+			return (ft_error("Error while creating monitor\n"));
 	i = -1;
+	ft_safe_thread(&t_monitor, NULL, NULL, JOIN);
 	while (++i < table->philo_nbr)
 		ft_safe_thread(&table->threads[i], NULL, NULL, JOIN);
-	if (table->limit_meals_nbr > 0)
-		ft_safe_thread(&t_monitor, NULL, NULL, JOIN);
 	return (0);
 }
 
@@ -90,6 +80,7 @@ int	main(int argc, char **argv)
 {
 	t_table	table;
 
+	table.end = false;
 	if (argc == 5 || argc == 6)
 	{
 		if (parse_input(&table, argv))
