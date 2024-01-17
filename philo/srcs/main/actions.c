@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 17:35:31 by aaespino          #+#    #+#             */
-/*   Updated: 2024/01/16 17:33:01 by aaespino         ###   ########.fr       */
+/*   Updated: 2024/01/17 17:07:41 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,6 @@ static void	drop_forks(t_philo *philo)
 {
 	ft_safe_mutex(&philo->left->fork, UNLOCK);
 	ft_safe_mutex(&philo->right->fork, UNLOCK);
-	philo_does(SLEEP, philo);
-	ft_usleep(philo->table->time_to_sleep);
 }
 
 void	do_eat(t_philo *philo)
@@ -34,23 +32,20 @@ void	do_eat(t_philo *philo)
 	{
 		if (philo->meals_count >= philo->table->limit_meals_nbr)
 			while (!(safe_get_bool(&philo->table->mutex, &philo->table->end)))
-				ft_usleep(100);
+				;
 	}
 	take_forks(philo);
 	ft_safe_mutex(&philo->mutex, LOCK);
 	philo->eating = true;
 	philo->time_to_die = ft_get_time() + philo->table->time_to_die;
 	philo_does(EAT, philo);
+	philo->last_meal_time = ft_get_time();
 	philo->meals_count++;
 	ft_usleep(philo->table->time_to_eat);
 	philo->eating = false;
 	ft_safe_mutex(&philo->mutex, UNLOCK);
 	drop_forks(philo);
-}
-
-void	do_sleep(t_philo *philo)
-{
-	philo_does (SLEEP, philo);
+	philo_does(SLEEP, philo);
 	ft_usleep(philo->table->time_to_sleep);
 }
 

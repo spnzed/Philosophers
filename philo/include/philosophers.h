@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 15:23:31 by aaespino          #+#    #+#             */
-/*   Updated: 2024/01/16 16:28:45 by aaespino         ###   ########.fr       */
+/*   Updated: 2024/01/17 15:19:51 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,7 @@ typedef struct s_table
 	long		time_to_eat;
 	long		time_to_sleep;
 	long		start_simulation;
+	bool		ready;
 	bool		end;
 }	t_table;
 
