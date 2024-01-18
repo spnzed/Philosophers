@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 16:56:28 by aaespino          #+#    #+#             */
-/*   Updated: 2024/01/17 17:25:30 by aaespino         ###   ########.fr       */
+/*   Updated: 2024/01/18 13:51:03 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	start_dinning(t_table *table)
 					&table->philos[i], CREATE)))
 			return (ft_error("Error while creating threads\n"));
 	if (!(ft_safe_thread(&t_monitor, &monitor, table, CREATE)))
-			return (ft_error("Error while creating monitor\n"));
+		return (ft_error("Error while creating monitor\n"));
 	table->start_simulation = ft_get_time();
 	safe_put_bool(&table->mutex, &table->ready, true);
 	i = -1;

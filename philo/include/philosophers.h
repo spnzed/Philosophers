@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 15:23:31 by aaespino          #+#    #+#             */
-/*   Updated: 2024/01/17 15:19:51 by aaespino         ###   ########.fr       */
+/*   Updated: 2024/01/18 13:55:01 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,8 @@ typedef struct s_table
 }	t_table;
 
 //***************    PROTOTYPES     ***************
-	//actions.c				
+	//actions.c		
+void		wait_all_threads(t_table *table);
 void		do_eat(t_philo *philo);
 void		do_sleep(t_philo *philo);
 void		do_think(t_philo *philo);
