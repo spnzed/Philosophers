@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 14:47:25 by aaespino          #+#    #+#             */
-/*   Updated: 2024/01/18 15:04:07 by aaespino         ###   ########.fr       */
+/*   Updated: 2024/01/18 15:56:13 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,12 @@ bool	simulation_finished(t_table *table)
 
 long	last_meal(t_philo *philo)
 {
-	return (safe_get_long(&philo->mutex, philo->last_meal_time));
+	long	ret;
+
+	ft_safe_mutex (&philo->mutex, LOCK);
+	ret = philo->last_meal_time;
+	ft_safe_mutex (&philo->mutex, UNLOCK);
+	return (ret);
 }
 
 long	full_philos_are(t_table *table)

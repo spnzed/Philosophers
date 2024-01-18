@@ -6,21 +6,13 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 18:50:12 by aaespino          #+#    #+#             */
-/*   Updated: 2024/01/18 15:01:09 by aaespino         ###   ########.fr       */
+/*   Updated: 2024/01/18 15:57:25 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-long	ft_time_passed(long start)
-{
-	long	elapsed;
-
-	elapsed = ft_get_time() - start;
-	return (elapsed);
-}
-
-int	monitor_times_eaten(t_table *table)
+static int	monitor_times_eaten(t_table *table)
 {
 	if (safe_get_long(&table->mutex, table->full_philos)
 		== table->philo_nbr)
@@ -41,7 +33,7 @@ void	*monitor(void *data)
 	while (i++ < table->philo_nbr && !simulation_finished(table)
 		&& !full_philos_are(table))
 	{
-		if (last_meal(&table->philos[i]) && last_meal(&table->philos[i]) > 0)
+		if (last_meal(&table->philos[i]) > 0)
 		{
 			if (ft_time_passed(last_meal(&table->philos[i]))
 				>= table->time_to_die)
@@ -83,7 +75,6 @@ void	*dinner_routine(void *data)
 
 	philo = (t_philo *)data;
 	wait_all_threads(philo->table);
-	safe_put_long(&philo->mutex, &philo->last_meal_time, ft_get_time());
 	if (philo->philo_id % 2 != 0)
 		ft_usleep(philo->table->time_to_eat / 10);
 	while (!(safe_get_bool(&philo->table->mutex, &philo->table->end)))

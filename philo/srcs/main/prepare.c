@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 15:30:46 by aaespino          #+#    #+#             */
-/*   Updated: 2024/01/15 17:12:47 by aaespino         ###   ########.fr       */
+/*   Updated: 2024/01/18 15:22:34 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ static int	init_philos(t_table *table)
 		table->philos[i].table = table;
 		table->philos[i].philo_position = i;
 		table->philos[i].philo_id = i + 1;
+		table->philos[i].last_meal_time = -1;
 		table->philos[i].time_to_die = table->time_to_die;
 		table->philos[i].limit_meals_nbr = table->limit_meals_nbr;
 		table->philos[i].meals_count = 0;

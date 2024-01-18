@@ -4,7 +4,7 @@
 
 NAME     := philo
 CC       := gcc
-FLAGS    := -Wall -Wextra -Werror -Iinclude -g #-fsanitize=thread
+FLAGS    := -Wall -Wextra -Werror -Iinclude -g -fsanitize=thread
 ################################################################################
 #                                 PROGRAM'S SRCS                               #
 ################################################################################
@@ -26,6 +26,7 @@ SRCS        :=            srcs/philosophers.c \
                           srcs/utils/ft_safe_mutex.c \
                           srcs/utils/ft_safe_thread.c \
                           srcs/utils/ft_strcmp.c \
+                          srcs/utils/ft_time_passed.c \
                           srcs/utils/ft_usleep.c 
                           
 OBJS        := $(SRCS:.c=.o)

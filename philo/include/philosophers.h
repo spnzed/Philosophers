@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 15:23:31 by aaespino          #+#    #+#             */
-/*   Updated: 2024/01/18 14:11:03 by aaespino         ###   ########.fr       */
+/*   Updated: 2024/01/18 15:16:19 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,8 +103,7 @@ typedef struct s_table
 }	t_table;
 
 //***************    PROTOTYPES     ***************
-	//actions.c		
-void		wait_all_threads(t_table *table);
+	//actions.c
 void		do_eat(t_philo *philo);
 void		do_sleep(t_philo *philo);
 void		do_think(t_philo *philo);
@@ -143,6 +142,7 @@ bool		ft_safe_mutex(t_mutex *mutex, t_mutex_code code);
 bool		ft_safe_thread(t_thread *thread, void *(*function)(void *),
 				void *data, t_pthread_code code);
 int			ft_strcmp(const char *s1, const char *s2);
+long		ft_time_passed(long start);
 int			ft_usleep(long time);
 
 #endif
