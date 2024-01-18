@@ -6,17 +6,11 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 17:35:31 by aaespino          #+#    #+#             */
-/*   Updated: 2024/01/18 13:55:58 by aaespino         ###   ########.fr       */
+/*   Updated: 2024/01/18 14:03:32 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
-
-void	wait_all_threads(t_table *table)
-{
-	while (!safe_get_bool(&table->mutex, &table->ready))
-		;
-}
 
 static void	take_forks(t_philo *philo)
 {

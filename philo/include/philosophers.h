@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 15:23:31 by aaespino          #+#    #+#             */
-/*   Updated: 2024/01/18 13:55:01 by aaespino         ###   ########.fr       */
+/*   Updated: 2024/01/18 14:11:03 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,12 @@ void		safe_put_long(t_mutex *mutex, long *dest, long value);
 long		safe_get_long(t_mutex *mutex, long value);
 void		safe_put_bool(t_mutex *mutex, bool *dest, bool val);
 bool		safe_get_bool(t_mutex *mutex, bool *val);
+	//wrappers.c
+void		wait_all_threads(t_table *table);
+bool		simulation_finished(t_table *table);
+long		full_philos_are(t_table *table);
+long		last_meal(t_philo *philo);
+
 //***	utils	***
 int			ft_atoi(const char *str);
 long		ft_atol(const char *str);

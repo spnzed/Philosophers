@@ -6,7 +6,7 @@
 /*   By: aaespino <aaespino@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 18:50:12 by aaespino          #+#    #+#             */
-/*   Updated: 2024/01/18 13:56:15 by aaespino         ###   ########.fr       */
+/*   Updated: 2024/01/18 14:13:08 by aaespino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,17 +38,13 @@ void	*monitor(void *data)
 
 	i = 0;
 	table = (t_table *)data;
-	while (i++ < table->philo_nbr
-		&& !(safe_get_bool(&table->mutex, &table->end))
-		&& safe_get_long(&table->mutex, table->full_philos) == 0)
+	while (i++ < table->philo_nbr && !simulation_finished(table)
+		&& !full_philos_are(table))
 	{
-		if (safe_get_long(&table->philos[i].mutex,
-				table->philos[i].last_meal_time)
-			&& safe_get_long(&table->philos[i].mutex,
-				table->philos[i].last_meal_time) > 0)
+		if (last_meal(&table->philos[i]) && last_meal(&table->philos[i]) > 0)
 		{
-			if (ft_time_passed(safe_get_long(&table->philos[i].mutex,
-						table->philos[i].last_meal_time)) >= table->time_to_die)
+			if (ft_time_passed(last_meal(&table->philos[i]))
+				>= table->time_to_die)
 			{
 				philo_does(DIE, &table->philos[i]);
 				break ;

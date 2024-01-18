@@ -4,7 +4,7 @@
 
 NAME     := philo
 CC       := gcc
-FLAGS    := -Wall -Wextra -Werror -Iinclude -g #-fsanitize=thread
+FLAGS    := -Wall -Wextra -Werror -Iinclude -g -fsanitize=thread
 ################################################################################
 #                                 PROGRAM'S SRCS                               #
 ################################################################################
@@ -16,6 +16,7 @@ SRCS        :=            srcs/philosophers.c \
                           srcs/main/prepare.c \
                           srcs/main/routines.c \
                           srcs/main/safe_data.c \
+                          srcs/main/wrappers.c \
                           srcs/utils/ft_atoi.c \
                           srcs/utils/ft_atol.c \
                           srcs/utils/ft_error.c \
